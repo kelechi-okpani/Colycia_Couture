@@ -48,7 +48,7 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 pt-28 pb-20 px-6 font-sans">
+    <div className="min-h-screen bg-white text-neutral-900 pt-28 pb-20 px-6 font-sans py-10">
       <div className="max-w-5xl mx-auto">
         <Link href="/admin" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-neutral-400 hover:text-black mb-8 transition-colors">
           <IoArrowBackOutline /> Admin Dashboard
