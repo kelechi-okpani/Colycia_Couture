@@ -4,15 +4,10 @@ import './globals.css';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import { Providers } from './store/Providers';
-
+import { Toaster } from 'react-hot-toast';
 
 // Load luxury font
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-luxury' });
-const inter = Inter({ 
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-inter', 
-});
+
 
 export const metadata: Metadata = {
   title: 'Colycia Couture | Elegance, Comfort, Style',
@@ -25,16 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="font-sans">
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans" suppressHydrationWarning>
+              <Providers>
+                <Toaster position="bottom-right" reverseOrder={false} />
         <Navbar />
-        {/* We use pt-20 to account for the sticky navbar */}
         <main className="pt-20 min-h-screen">
-          <Providers>
              {children}
-           </Providers>
         </main>
         <Footer />
+        </Providers>
+
       </body>
     </html>
   );

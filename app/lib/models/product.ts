@@ -1,13 +1,41 @@
 import mongoose from 'mongoose';
 
-
 const ProductSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  description: String,
-  category: { type: String, enum: ['AGBADA', 'KAFTANS', 'SHIRTS', 'SUITS'] },
-  images: [String],
-  sizes: [String], // ["S", "M", "L", "XL", "XXL"]
+  name: { 
+    type: String, 
+    required: true,
+    trim: true 
+  },
+  price: { 
+    type: Number, 
+    required: true 
+  },
+  description: { 
+    type: String, 
+    default: "" 
+  },
+  category: { 
+    type: String, 
+    required: true,
+    enum: ['AGBADA', 'KAFTANS', 'SHIRTS', 'SUITS'],
+    uppercase: true
+  },
+  // Primary image for the shop grid
+  image: { 
+    type: String, 
+    required: true 
+  },
+  // Gallery images for the product detail page
+  gallery: { 
+    type: [String], 
+    default: [] 
+  },
+  // Available sizes
+  sizes: { 
+    type: [String], 
+    default: ["S", "M", "L", "XL", "XXL"] 
+  },
 }, { timestamps: true });
 
+// Check if the model exists before exporting to prevent Next.js HMR errors
 export default mongoose.models.Product || mongoose.model('Product', ProductSchema);

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Mission() {
   return (
@@ -11,10 +12,13 @@ export default function Mission() {
           “Indulge in The Art Of Dressing With Colycia Couture, Every Stitch is Designed For The Man Who Demands Excellence in Every Detail.”
         </blockquote>
         <div className="flex justify-center">
-            <button className="flex items-center gap-2.5 bg-black text-white px-8 py-3.5 rounded-full font-medium hover:bg-neutral-800 transition">
+          <Link href='/shop'>
+            <div className="cursor-pointer flex items-center gap-2.5 bg-black text-white px-8 py-3.5 rounded-full font-medium hover:bg-neutral-800 transition">
                 SHOP NOW
                 <ArrowRight className="h-5 w-5" />
-            </button>
+            </div>
+          </Link>
+          
         </div>
       </div>
     </section>

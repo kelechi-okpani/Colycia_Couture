@@ -1,38 +1,57 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const token = request.cookies.get('next-auth.session-token');
+  
+  // 1. Get the token using NextAuth helper
+  // This automatically handles __Secure- prefix in production
+  const token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET 
+  });
 
-  // 1. PROTECT API ROUTES (Return JSON)
-  const isAdminApi = path.startsWith('/api/admin');
-  if (isAdminApi && !token) {
-    return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
+  // 2. PROTECT API ROUTES
+  if (path.startsWith('/api')) {
+    const publicApiEndpoints = [
+      '/api/shop', 
+      '/api/auth', 
+      '/api/signup', 
+      '/api/login', 
+      '/api/forgot-password', 
+      '/api/reset-password', 
+      '/api/cart'
+    ];
+    
+    const isPublicApi = publicApiEndpoints.some(api => path.startsWith(api));
+
+    if (!isPublicApi && !token) {
+      return NextResponse.json(
+        { error: "Authentication required" }, 
+        { status: 401 }
+      );
+    }
   }
 
-  // 2. PROTECT FRONTEND PAGES (Redirect to Login)
-  // Add '/checkout' and '/profile' or any other restricted pages here
-  const protectedPages = ['/checkout', '/profile'];
+  // 3. PROTECT FRONTEND PAGES
+  const protectedPages = ['/checkout', '/profile', '/orders'];
   const isProtectedPage = protectedPages.some(page => path.startsWith(page));
 
   if (isProtectedPage && !token) {
-    // Redirect them to login, and add a 'callbackUrl' so they return to checkout after logging in
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('callbackUrl', path); 
-    
     return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
-// Ensure the matcher includes your frontend pages
 export const config = {
   matcher: [
-    '/api/admin/:path*', 
-    '/api/user/:path*', 
-    '/checkout', 
-    '/profile/:path*'
+    '/api/:path*', 
+    '/checkout/:path*', 
+    '/profile/:path*',
+    '/orders/:path*'
   ],
 };

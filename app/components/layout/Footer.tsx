@@ -24,7 +24,7 @@ const footerSections = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#f9f9f9] text-neutral-800 font-sans border-t border-neutral-100 mt-20">
+    <footer className="bg-[#f9f9f9] text-neutral-800 font-sans border-t border-neutral-100 ">
       <div className="max-w-7xl mx-auto px-6 py-16 md:px-10">
         
         {/* Main 4-Column Grid */}

@@ -13,11 +13,11 @@ import { INITIAL_PRODUCTS } from '../../data/data';
 
 // Dummy garment images for the slider
 const heroSlides = [
-  { id: 1, image: '/assets/hero_1.png', alt: 'Agabada 1' },
-  { id: 2, image: '/assets/hero_2.png', alt: 'Kaftan 1' },
-  { id: 3, image: '/assets/hero_3.png', alt: 'Agbada 2' },
-  { id: 4, image: '/assets/hero_4.png', alt: 'Agabada 1 (Rep)' },
-  { id: 5, image: '/assets/hero_5.png', alt: 'Kaftan 1 (Rep)' },
+  { id: 1, image: '/assets/hero_1.png', name: 'Agabada 1' },
+  { id: 2, image: '/assets/hero_2.png', name: 'Kaftan 1' },
+  { id: 3, image: '/assets/hero_3.png', name: 'Agbada 2' },
+  { id: 4, image: '/assets/hero_4.png', name: 'Agabada 1 (Rep)' },
+  { id: 5, image: '/assets/hero_5.png', name: 'Kaftan 1 (Rep)' },
 ];
 
 export default function Hero() {
@@ -55,16 +55,16 @@ export default function Hero() {
             pagination={{ clickable: true }}
             className="h-full w-full"
           >
-            {INITIAL_PRODUCTS.map((slide) => (
+            {heroSlides.map((slide) => (
+            // {INITIAL_PRODUCTS.map((slide) => (
               <SwiperSlide key={slide.id} className="relative w-full h-full">
-                {/* Fill the entire container */}
                 <div className="relative w-full h-full">
                   <Image
                     src={slide.image}
                     alt={slide.name}
-                    // fill
-                    width={900}
-                    height={200}
+                    fill
+                    // width={900}
+                    // height={200}
                     className="object-cover transition-transform duration-[5000ms] scale-100 group-hover:scale-110"
                     style={{ objectPosition: 'center' }}
                     priority

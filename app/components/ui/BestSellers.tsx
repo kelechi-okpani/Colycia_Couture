@@ -1,31 +1,90 @@
-import ProductCard from './ProductCard';
+"use client";
 
-// Dummy product data matching the design
-const products = [
-  { id: 1, name: 'AGBADA 01 | ROYAL PURPLE', price: 168000, imageUrl: '/products/p1.png' },
-  { id: 2, name: 'AGBADA 02 | OBI WHITE', price: 168000, imageUrl: '/products/p2.png' },
-  { id: 3, name: 'AGBADA 03 | CREAM & GOLD EMBROIDERY', price: 168000, imageUrl: '/products/p3.png' },
-  { id: 4, name: 'AGBADA 04 | MOKO ORANGE PATTERN', price: 168000, imageUrl: '/products/p4.png' },
-  { id: 5, name: 'KAFTAN 01 | NAVY GREEN & GOLD', price: 88000, imageUrl: '/products/p5.png' },
-  { id: 6, name: 'KAFTAN 02 | SHIRTING BLUE & WHITE', price: 88000, imageUrl: '/products/p6.png' },
-  { id: 7, name: 'AGBADA 05 | EXOTIC CREAM', price: 168000, imageUrl: '/products/p7.png' },
-  { id: 8, name: 'CANIRE 01 | SHIRT BLUE TIE DYE', price: 90000, imageUrl: '/products/p8.png' },
-];
+import { useEffect } from 'react';
+import ProductCard from './ProductCard';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
+import { fetchProducts } from '@/app/store/slices/productSlice';
+import { ProductSkeleton } from '@/app/components/ui/Loading';
 
 export default function BestSellers() {
+  const dispatch = useAppDispatch();
+  
+  // 1. Grab products and status from Redux Store
+  const { items, status, error } = useAppSelector((state) => state.products);
+
+  // 2. Fetch data from MongoDB via API on component mount
+  useEffect(() => {
+    // Only fetch if data isn't already loaded or if you want a fresh pull
+    if (status === 'idle') {
+      dispatch(fetchProducts());
+    }
+  }, [status, dispatch]);
+
+  // 3. Logic: Filter for 'featured' items or simply show the top 8 products
+  const bestSellers = items && items.length > 0 
+    ? items.filter((p: any) => p.featured).slice(0, 8) 
+    : items?.slice(0, 8);
+
+  // --- RENDER STATES ---
+
+  // Loading State: Show skeletons while fetching
+  if (status === 'loading') {
+    return (
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <h2 className="text-3xl font-luxury font-medium tracking-widest text-center mb-16 uppercase">
+            Best Sellers
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+            {[...Array(4)].map((_, i) => (
+              <ProductSkeleton key={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error State
+  if (status === 'failed') {
+    return (
+      <div className="py-24 text-center">
+        <p className="text-red-500 text-sm tracking-widest uppercase">Error loading products: {error}</p>
+      </div>
+    );
+  }
+
   return (
-    <section className="py-24">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <h2 className="text-3xl font-luxury font-medium tracking-tight text-center mb-16">
-          BEST SELLERS
-        </h2>
+        <div className="flex flex-col items-center mb-16">
+          <h2 className="text-3xl font-luxury font-medium tracking-[0.2em] text-center text-black uppercase">
+            Best Sellers
+          </h2>
+          <div className="w-16 h-[1px] bg-black mt-4"></div>
+        </div>
         
         {/* Responsive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+          {bestSellers?.map((product: any) => (
+            <ProductCard 
+              key={product._id} 
+              _id={product._id} 
+              name={product.name} 
+              price={product.price} 
+              imageUrl={product.image} // Mapping DB 'image' to 'imageUrl'
+            />
           ))}
         </div>
+
+        {/* Empty State */}
+        {status === 'succeeded' && bestSellers?.length === 0 && (
+          <div className="text-center py-10">
+            <p className="text-neutral-400 font-light uppercase tracking-widest text-xs">
+              New collection arriving soon.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
