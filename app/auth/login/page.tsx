@@ -70,17 +70,21 @@ export default function LoginPage() {
   }
 };
 
+  //  router.push("/profile"); 
+  
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!validate()) return;
 
   try {
-   const result =  await dispatch(loginUser(formData)).unwrap();
-   if(result){
-      window.location.href = "/profile";
-    //  router.push("/profile"); 
-   }
-   console.log(result, "...login user")
+    const result = await dispatch(loginUser(formData)).unwrap();
+  
+    if (result) {
+      console.log("Login successful, redirecting...", result);
+      // Force the redirect and return immediately to stop execution
+      window.location.assign("/profile"); 
+      return; 
+    }
   } catch (err) {
     console.error("Failed to login:", err);
   }
