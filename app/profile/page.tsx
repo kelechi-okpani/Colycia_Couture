@@ -34,7 +34,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setMounted(true);
-    if (!authLoading && !user) router.push("/auth/login");
+    // if (!authLoading && !user) router.push("/auth/login");
+    if (mounted && !authLoading && !user) {
+    router.push("/auth/login");
+    }
     if (user?._id) dispatch(fetchOrders({ userId:user._id || user.id } ));
   }, [user, authLoading, dispatch, router]);
 
