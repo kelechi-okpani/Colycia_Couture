@@ -28,7 +28,9 @@ export default function ProfilePage() {
 
   // Grab States
   const { user, loading: authLoading } = useAppSelector((state) => state.auth);
-  const { orders, status, error } = useAppSelector((state) => state.order);  // const { items: cartItems } = useAppSelector((state) => state.cart);
+  const { orders, status, error } = useAppSelector((state) => state.order);
+  
+  // const { items: cartItems } = useAppSelector((state) => state.cart);
   // Assuming you have a wishlist slice
   const { items: wishlistItems } = useAppSelector((state: any) => state.wishlist || { items: [] });
 
@@ -48,7 +50,8 @@ export default function ProfilePage() {
     router.push("/auth/login");
   };
 
-  if (!mounted || authLoading) {
+  if (authLoading) {
+  // if (!mounted || authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>

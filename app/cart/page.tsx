@@ -184,9 +184,12 @@ const handleRemoveItem = (productId: string, size: string) => {
 
     {/* Checkout Footer Section */}
     <div className="mt-10 bg-neutral-50 py-10 px-6 md:px-10">
+      
       <div className="max-w-md ml-auto space-y-6 text-right">
+     
         <div className="space-y-2">
            <div className="flex justify-end items-baseline gap-4">
+            
              <span className="text-[12px] font-bold uppercase tracking-widest text-neutral-800">Subtotal</span>
              <p className="text-lg font-bold text-black">
                 ₦{totalAmount.toLocaleString()}.00 NGN
@@ -200,7 +203,29 @@ const handleRemoveItem = (productId: string, size: string) => {
         <Link href="/checkout" className="block w-full bg-black text-white py-4 text-[12px] font-bold tracking-[0.3em] uppercase hover:bg-neutral-800 transition-all text-center">
             Checkout
         </Link>
+
+           <div className="col-span-1 flex flex justify-end">
+            <button 
+              onClick={handleClearCart}
+              className="group flex items-center gap-2 text-[10px] uppercase tracking-widest text-neutral-400 hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-3 h-3 border-2 border-neutral-300 border-t-black rounded-full animate-spin" />
+                  Clearing...
+                </span>
+              ) : (
+                <>
+                  <IoTrashOutline size={16} className="group-hover:rotate-12 transition-transform" />
+                  <span>Clear Bag</span>
+                </>
+              )}
+            </button>
+          </div>
       </div>
+
+      
     </div>
   </main>
 </div>
