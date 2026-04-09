@@ -141,7 +141,7 @@ const authSlice = createSlice({
     syncUserArrays: (state, action: PayloadAction<{ cart?: any[], wishlist?: any[] }>) => {
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
-        localStorage.setItem('colycia_user', JSON.stringify(state.user));
+        // localStorage.setItem('colycia_user', JSON.stringify(state.user));
       }
     }
   },
