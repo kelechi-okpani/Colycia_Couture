@@ -21,14 +21,14 @@ export default function WishlistPage() {
   // 2. Fetch from Database on mount
   useEffect(() => {
     if (user?._id) {
-      dispatch(fetchWishlist(user._id));
+      dispatch(fetchWishlist(user?._id));
     }
   }, [dispatch, user?._id]);
 
   // 3. Remove Item from Wishlist
   const handleRemove = (productId: string) => {
       if (!user?._id) return;
-      dispatch(toggleWishlistApi({ userId: user._id, productId }));
+      dispatch(toggleWishlistApi({ userId: user?._id, productId }));
     };
 
   // 4. Move to Cart (Sync with Database)
