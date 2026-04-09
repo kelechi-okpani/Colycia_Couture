@@ -226,8 +226,11 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
             <div className="mb-10">
               <div className="flex justify-between items-end mb-4">
                 <h3 className="text-[12px] font-bold uppercase tracking-wider">Select Size</h3>
-                <button onClick={() => setIsSizeGuideOpen(true)}
-                 className="text-[11px] underline font-medium hover:text-neutral-500">Size Guide</button>
+                {/* <button onClick={() => setIsSizeGuideOpen(true)}
+                 className="text-[11px] underline font-medium hover:text-neutral-500">
+                  Size Guide
+                 
+                 </button> */}
               </div>
               <div className="flex flex-wrap gap-2">
                 {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
@@ -281,7 +284,7 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
               <button
               onClick={() => setIsSizeGuideOpen(true)}
               className="cursor-pointer flex-1 h-12 border border-neutral-200 text-[11px] font-bold uppercase tracking-wider hover:bg-neutral-50 transition-colors">
-                Custom Measurement
+                Size Guide
               </button>
             </div>
 
