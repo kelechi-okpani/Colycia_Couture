@@ -27,7 +27,7 @@ export default function Navbar() {
   const cartItems = useAppSelector((state:any) => state.cart.items);
   const wishlistItems = useAppSelector((state:any) => state.wishlist.items);
 
-  console.log(user, "...user")
+
   // 2. Fetch User Data from DB on mount
   useEffect(() => {
     setMounted(true);

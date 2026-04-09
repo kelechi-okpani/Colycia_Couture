@@ -75,8 +75,11 @@ const handleSubmit = async (e: React.FormEvent) => {
   if (!validate()) return;
 
   try {
-    await dispatch(loginUser(formData)).unwrap();
+   const result =  await dispatch(loginUser(formData)).unwrap();
+   if(result){
     router.push("/profile"); 
+   }
+   console.log(result, "...login user")
   } catch (err) {
     console.error("Failed to login:", err);
   }
