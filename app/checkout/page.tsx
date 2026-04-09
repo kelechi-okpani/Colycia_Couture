@@ -10,6 +10,7 @@ import { RootState } from '../store/store';
 import PaymentHandler from '../components/ui/PaymentHandler';
 import { FaTruckFast } from "react-icons/fa6"
 import {  IoGlobeOutline } from "react-icons/io5"
+import { countryData } from '../data/data';
 
 
 
@@ -33,7 +34,8 @@ const { items } = useAppSelector((state: RootState) => state.cart);
     state: '',
     zipCode: '',
   });
-
+  
+const selectedCountryObj = countryData.find(c => c.country === formData.country);
   
 useEffect(() => {
   if (orders && orders.length > 0) {
@@ -218,35 +220,46 @@ useEffect(() => {
                   value={formData.address}
                   onChange={handleInputChange}
                   type="text"
-                  placeholder="Street Address / Suite / Apartment"
+                  placeholder="Delivery -  Address"
                   className={`w-full bg-white border ${errors.address ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm`}
                 />
 
                 {/* Country Select */}
-                <div className="relative">
-                  <select
-                    name="country"
-                    className="w-full bg-white border border-neutral-200 px-4 py-3.5 text-sm text-neutral-600 outline-none appearance-none cursor-pointer"
-                  >
-                    <option value="Nigeria">Nigeria</option>
-                  </select>
-                  <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
-                </div>
+               <div className="relative">
+      <select
+        name="country"
+        value={formData.country}
+        onChange={handleInputChange}
+        className="w-full bg-white border border-neutral-200 px-4 py-3.5 text-sm text-neutral-600 outline-none appearance-none cursor-pointer"
+      >
+        <option value="">Select Country</option>
+        {countryData.map((item) => (
+          <option key={item.code} value={item.country}>
+            {item.country}
+          </option>
+        ))}
+      </select>
+      <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
+    </div>
 
-                {/* State/City Select */}
-                <div className="relative">
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    className={`w-full bg-white border ${errors.state ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-400 outline-none appearance-none cursor-pointer focus:border-black transition-colors`}
-                  >
-                    <option value="">State/city</option>
-                    <option value="Abuja">Abuja</option>
-                    <option value="Lagos">Lagos</option>
-                  </select>
-                  <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
-                </div>
+    {/* Dynamic State/City Select */}
+    <div className="relative">
+      <select
+        name="state"
+        value={formData.state}
+        onChange={handleInputChange}
+        disabled={!formData.country} // Disable if no country is chosen
+        className={`w-full bg-white border ${errors.state ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm ${!formData.state ? 'text-neutral-400' : 'text-neutral-600'} outline-none appearance-none cursor-pointer focus:border-black transition-colors disabled:bg-neutral-50`}
+      >
+        <option value="">{formData.country ? "Select State/City" : "Select a country first"}</option>
+        {selectedCountryObj?.states.map((state) => (
+          <option key={state} value={state}>
+            {state}
+          </option>
+        ))}
+      </select>
+      <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
+    </div>
 
                 {/* Zip Code */}
                 <input

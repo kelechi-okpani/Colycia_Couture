@@ -381,3 +381,128 @@ export const Products = [
 
 
 
+export const countryData = [
+  {
+    country: "Nigeria",
+    code: "NG",
+    states: [
+      "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
+      "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", 
+      "FCT - Abuja", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", 
+      "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", 
+      "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
+    ]
+  },
+  {
+    country: "United States",
+    code: "US",
+    states: [
+      "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", 
+      "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", 
+      "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
+      "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", 
+      "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", 
+      "New Hampshire", "New Jersey", "New Mexico", "New York", 
+      "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", 
+      "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", 
+      "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", 
+      "West Virginia", "Wisconsin", "Wyoming"
+    ]
+  },
+  {
+    country: "United Kingdom",
+    code: "GB",
+    states: ["England", "Scotland", "Wales", "Northern Ireland"]
+  },
+  {
+    country: "Ghana",
+    code: "GH",
+    states: [
+      "Greater Accra", "Ashanti", "Central", "Eastern", "Western", 
+      "Northern", "Upper East", "Upper West", "Volta", "Bono"
+    ]
+  },
+  {
+    country: "Canada",
+    code: "CA",
+    states: [
+      "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", 
+      "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan"
+    ]
+  },
+  {
+    country: "South Africa",
+    code: "ZA",
+    states: [
+      "Eastern Cape", "Free State", "Gauteng", "KwaZulu-Natal", "Limpopo", 
+      "Mpumalanga", "Northern Cape", "North West", "Western Cape"
+    ]
+  },
+  {
+    country: "Kenya",
+    code: "KE",
+    states: [
+      "Baringo", "Bomet", "Bungoma", "Busia", "Elgeyo Marakwet", "Embu", "Garissa", "Homa Bay", 
+      "Isiolo", "Kajiado", "Kakamega", "Kericho", "Kiambu", "Kilifi", "Kirinyaga", "Kisii", 
+      "Kisumu", "Kitui", "Kwale", "Laikipia", "Lamu", "Machakos", "Makueni", "Mandera", 
+      "Meru", "Migori", "Mombasa", "Murang'a", "Nairobi", "Nakuru", "Nandi", "Narok", 
+      "Nyamira", "Nyandarua", "Nyeri", "Samburu", "Siaya", "Taita Taveta", "Tana River", 
+      "Tharaka Nithi", "Trans Nzoia", "Turkana", "Uasin Gishu", "Vihiga", "Wajir", "West Pokot"
+    ]
+  },
+  {
+    country: "Germany",
+    code: "DE",
+    states: [
+      "Baden-Württemberg", "Bavaria", "Berlin", "Brandenburg", "Bremen", "Hamburg", 
+      "Hesse", "Lower Saxony", "Mecklenburg-Vorpommern", "North Rhine-Westphalia", 
+      "Rhineland-Palatinate", "Saarland", "Saxony", "Saxony-Anhalt", "Schleswig-Holstein", "Thuringia"
+    ]
+  },
+  {
+    country: "France",
+    code: "FR",
+    states: [
+      "Auvergne-Rhône-Alpes", "Bourgogne-Franche-Comté", "Brittany", "Centre-Val de Loire", 
+      "Corsica", "Grand Est", "Hauts-de-France", "Île-de-France", "Normandy", "Nouvelle-Aquitaine", 
+      "Occitanie", "Pays de la Loire", "Provence-Alpes-Côte d'Azur"
+    ]
+  },
+  {
+    country: "Australia",
+    code: "AU",
+    states: [
+      "New South Wales", "Victoria", "Queensland", "Western Australia", 
+      "South Australia", "Tasmania", "Australian Capital Territory", "Northern Territory"
+    ]
+  },
+  {
+    country: "India",
+    code: "IN",
+    states: [
+      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", 
+      "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", 
+      "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", 
+      "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", 
+      "Uttar Pradesh", "Uttarakhand", "West Bengal"
+    ]
+  },
+  {
+    country: "China",
+    code: "CN",
+    states: [
+      "Anhui", "Beijing", "Chongqing", "Fujian", "Gansu", "Guangdong", "Guangxi", 
+      "Guizhou", "Hainan", "Hebei", "Heilongjiang", "Henan", "Hubei", "Hunan", 
+      "Inner Mongolia", "Jiangsu", "Jiangxi", "Jilin", "Liaoning", "Ningxia", 
+      "Qinghai", "Shaanxi", "Shandong", "Shanghai", "Shanxi", "Sichuan", "Tianjin", 
+      "Tibet", "Xinjiang", "Yunnan", "Zhejiang"
+    ]
+  },
+  {
+    country: "United Arab Emirates",
+    code: "AE",
+    states: [
+      "Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"
+    ]
+  }
+];
