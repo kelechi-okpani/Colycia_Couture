@@ -78,7 +78,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Phone:</span>
-                <span className="text-gray-900 font-medium">{user?.phone || '081193088290'}</span>
+                <span className="text-gray-900 font-medium">{user?.phone}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Joined:</span>
@@ -97,7 +97,9 @@ export default function ProfilePage() {
               <button className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
                 Edit Profile
               </button>
-              <button className="w-full text-black font-bold py-2 hover:underline">
+              <button
+              onClick={handleLogout}
+              className="cursor-pointer w-full text-black font-bold py-2 hover:underline">
                 Logout
               </button>
             </div>

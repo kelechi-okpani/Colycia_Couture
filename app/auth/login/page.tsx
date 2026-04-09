@@ -52,7 +52,10 @@ export default function LoginPage() {
     if (!validate()) return;
 
     const result = await dispatch(loginUser(formData));
-    if (loginUser.fulfilled.match(result)) {
+    console.log(result, "result")
+    // console.log(result?.meta?.requestStatus === "fulfilled", "fulfilled ...result")
+    // if (loginUser.fulfilled.match(result)) {
+    if (result?.meta?.requestStatus === "fulfilled") {
       router.push("/profile"); // Redirect to home or dashboard on success
     }
   };
