@@ -34,21 +34,31 @@ export default function ProfilePage() {
   // Assuming you have a wishlist slice
   const { items: wishlistItems } = useAppSelector((state: any) => state.wishlist || { items: [] });
 
-  console.log(orders, "...orders")
   useEffect(() => {
     setMounted(true);
-    // if (!authLoading && !user) router.push("/auth/login");
-    if (mounted && !authLoading && !user) {
-    router.push("/auth/login");
-    }
-    if (user?._id) dispatch(fetchOrders({ userId:user._id || user.id } ));
+    if (!authLoading && !user) router.push("/auth/login");
+    // if (mounted && !authLoading && !user) {
+    // router.push("/auth/login");
+    // }
+    if (user?._id) dispatch(fetchOrders({ userId:user?._id || user.id } ));
   }, [user, authLoading, dispatch, router]);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
+  // const handleLogout = () => {
+  //   dispatch(logoutUser());
+  //   toast.success("Logged out successfully");
+  //   router.push("/auth/login");
+  // };
+
+  const handleLogout = async () => {
+  try {
+    await dispatch(logoutUser()).unwrap(); // ✅ wait for success
+
     toast.success("Logged out successfully");
     router.push("/auth/login");
-  };
+  } catch (error:any) {
+    toast.error(error || "Logout failed");
+  }
+};
 
   if (authLoading) {
   // if (!mounted || authLoading) {

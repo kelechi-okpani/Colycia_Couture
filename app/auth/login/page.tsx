@@ -154,7 +154,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               disabled={loading}
               className="w-full md:w-2/3 bg-black text-white py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all active:scale-[0.98] disabled:bg-neutral-400"
             >
-              {loading ? "Authenticating..." : "Sign In"}
+              {loading ? "please wait..." : "Sign In"}
             </button>
           </div>
         </form>

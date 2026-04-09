@@ -108,12 +108,30 @@ export const signupUser = createAsyncThunk(
 /**
  * LOGOUT: Clears NextAuth session and LocalStorage.
  */
-export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  await signOut({ redirect: false });
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('colycia_user');
+// export const logoutUser = createAsyncThunk('auth/logout', async () => {
+//   await signOut({ redirect: false });
+//   if (typeof window !== 'undefined') {
+//     localStorage.removeItem('colycia_user');
+//   }
+//     return true;
+// });
+
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOut({ redirect: false });
+
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('colycia_user');
+      }
+
+      return true; // ✅ important
+    } catch (error:any) {
+      return rejectWithValue(error.message || 'Logout failed');
+    }
   }
-});
+);
 
 // --- Other Thunks (Forgot/Reset) ---
 export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email: string, { rejectWithValue }) => {
@@ -180,7 +198,11 @@ const authSlice = createSlice({
           state.loading = false;
           state.error = action.payload || "An unexpected error occurred";
         }
-      );
+      )
+      .addMatcher(
+        (action) => action.type === logoutUser.fulfilled.type,
+        () => ({ ...initialState })
+      )
   },
 });
 

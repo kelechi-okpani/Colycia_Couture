@@ -6,7 +6,9 @@
 
 body {
 
-   font-family: serif;
+   /* font-family: serif; */
+   font-family: 'Poppins', sans-serif;
+   /* font-family: 'Playfair Display', serif; */
    font-weight: normal;
 }
 
@@ -30,7 +32,7 @@ body {
 }
 
 .font-luxury {
-  font-family: serif;
+  /* font-family: serif; */
 }
 
 
