@@ -1,5 +1,6 @@
 "use client";
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 // Swiper React components and modules
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -32,10 +33,13 @@ export default function Hero() {
           <p className="text-neutral-600 text-lg">
             Crafted for your Elegance, Absolute Comfort, & Confidence. Discover traditional wear redefined for the modern man.
           </p>
-          <button className="flex items-center gap-2.5 bg-black text-white px-8 py-3.5 rounded-full font-medium hover:bg-neutral-800 transition">
-            SHOP NOW
-            <ArrowRight className="h-5 w-5" />
-          </button>
+          <Link href='/shop'>
+              <button className="cursor-pointer flex items-center gap-2.5 bg-black text-white px-8 py-3.5 rounded-full font-medium hover:bg-neutral-800 transition">
+                VIEW MORE
+                <ArrowRight className="h-5 w-5" />
+              </button>
+          </Link>
+       
         </div>
 
         {/* Right Column: Garment Slider */}

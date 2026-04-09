@@ -2,11 +2,13 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useAppDispatch } from "@/app/store/hooks";
 import { resetCartState } from "@/app/store/slices/cartSlice";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { IoCheckmarkCircle, IoBagHandleOutline, IoArrowForward } from "react-icons/io5";
+import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
+import { syncCartAction, fetchCart } from '@/app/store/slices/cartSlice';
+
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -14,33 +16,7 @@ function SuccessContent() {
   const router = useRouter();
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
-
-
-// useEffect(() => {
-//   const confirmOrder = async () => {
-//     if (sessionId) {
-//       try {
-//         // Trigger the backend update
-//         const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
-//         const data = await response.json();
-//         if (data.success) {
-//           dispatch(resetCartState());
-//           setLoading(false);
-//         } else {
-//           // If payment isn't confirmed yet, maybe redirect or show error
-//           console.error("Payment confirmation failed");
-//           setLoading(false);
-//         }
-//       } catch (err) {
-//         console.error("Error confirming order:", err);
-//         setLoading(false);
-//       }
-//     } else {
-//       router.push("/");
-//     }
-//   };
-//   confirmOrder();
-// }, [sessionId, dispatch, router]);
+   const { user } = useAppSelector((state) => state.auth);
 
 
 
@@ -59,6 +35,8 @@ useEffect(() => {
       if (data.success) {
         // 2. Clear Redux State
         dispatch(resetCartState());
+        dispatch(syncCartAction({ userId: user?._id, action: 'clear' })).unwrap();
+        
 
         // 3. Clear LocalStorage (In case your Redux persist doesn't catch it)
         if (typeof window !== "undefined") {

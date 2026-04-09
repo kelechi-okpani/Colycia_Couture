@@ -83,13 +83,12 @@ export default function ShopPage() {
               // options={["All", "AGBADA", "KAFTANS", "SUITS", "UNISEX"]} 
                options={[
                   'All', 
-                  'AGBADA', 
-                  'KAFTANS', 
+                  'AGBADA',  
                   'SHIRTS', 
                   'SUITS', 
                   'CASUAL', 
                   'DANSIKI', 
-                  'ADIRE', 
+                  'FEMALE', 
                   'KAFTAN', 
                 ]} 
             

@@ -226,7 +226,8 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
             <div className="mb-10">
               <div className="flex justify-between items-end mb-4">
                 <h3 className="text-[12px] font-bold uppercase tracking-wider">Select Size</h3>
-                <button className="text-[11px] underline font-medium hover:text-neutral-500">Size Guide</button>
+                <button onClick={() => setIsSizeGuideOpen(true)}
+                 className="text-[11px] underline font-medium hover:text-neutral-500">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (

@@ -8,11 +8,13 @@ import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { RootState } from '../store/store';
 import PaymentHandler from '../components/ui/PaymentHandler';
-
+import { FaTruckFast } from "react-icons/fa6"
+import {  IoGlobeOutline } from "react-icons/io5"
 
 
 
 export default function CheckoutPage() {
+  const shipping_cost = " 10000"
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
   const [selectedAddressIdx, setSelectedAddressIdx] = useState<number | null>(null);
 const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -276,14 +278,33 @@ useEffect(() => {
                 {/* Shipping Fee */}
                 <div className="pt-2 flex items-center gap-4">
                   <span className="text-sm text-neutral-600">Shipping Fee:</span>
-                  <span className="text-base font-bold text-black uppercase">NGN 5,000</span>
+                  <span className="text-base font-bold text-black uppercase">NGN 10,000</span>
                 </div>
 
                 {/* Terms */}
                 <p className="text-[11px] text-neutral-500">
-                  I have Read and agreed to the <a href="#" className="text-blue-800 hover:underline">Terms and Conditions</a>
-                </p>
+                  I have Read and agreed to the <a href="/shipping" className="text-blue-800 hover:underline">Terms and Conditions</a>
+                </p> 
+                
+<div className="mt-6 space-y-3 rounded-lg border border-neutral-100 bg-neutral-50 p-4">
+      <div className="flex items-start gap-3">
+        <FaTruckFast className="mt-0.5 h-4 w-4 text-neutral-600" />
+        <div>
+          <p className="text-sm font-medium text-neutral-800">Domestic Delivery (Nigeria)</p>
+          <p className="text-xs text-neutral-500">Expected delivery within 2 weeks.</p>
+        </div>
+      </div>
 
+      <hr className="border-neutral-200" />
+
+      <div className="flex items-start gap-3">
+        <IoGlobeOutline className="mt-0.5 h-4 w-4 text-neutral-600" />
+        <div>
+          <p className="text-sm font-medium text-neutral-800">International Shipping</p>
+          <p className="text-xs text-neutral-500">Expected delivery within 3 weeks (includes global transit).</p>
+        </div>
+      </div>
+    </div>
              {/* Final Action - Passing validation check to PaymentHandler */}
             <div className=" border-t border-neutral-100">
                <PaymentHandler 

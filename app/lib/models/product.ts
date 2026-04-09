@@ -20,12 +20,11 @@ const ProductSchema = new mongoose.Schema({
     uppercase: true,
     enum: [
           'AGBADA', 
-          'KAFTANS', 
           'SHIRTS', 
           'SUITS', 
           'CASUAL', 
           'DANSIKI', 
-          'ADIRE', 
+          'FEMALE', 
           'KAFTAN',
     ],
     

@@ -21,8 +21,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
-    // Calculate total including the 5000 NGN shipping fee
-    const totalAmount = items.reduce((acc: number, item: any) => acc + item.price * item.quantity, 0) + 5000;
+    // Calculate total including the 10000 NGN shipping fee
+    const totalAmount = items.reduce((acc: number, item: any) => acc + item.price * item.quantity, 0) + 10000;
 
     // 1. Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
