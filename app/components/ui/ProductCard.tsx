@@ -78,7 +78,7 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!user?.id) {
+    if (!user?._id) {
       toast.error("Login to save to wishlist");
       return;
     }
