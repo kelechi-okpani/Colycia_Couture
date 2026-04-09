@@ -85,13 +85,33 @@ const cartSlice = createSlice({
         }
       )
       // Handle Fulfilled (Explicitly for this slice's thunks)
+      // .addMatcher(
+      //   (action) => action.type.startsWith('cart/') && action.type.endsWith('/fulfilled'),
+      //   (state, action: PayloadAction<CartItem[]>) => {
+      //     state.loading = false;
+      //     state.items = action.payload;
+      //   }
+      // )
+
+      // Handle Fulfilled
       .addMatcher(
         (action) => action.type.startsWith('cart/') && action.type.endsWith('/fulfilled'),
-        (state, action: PayloadAction<CartItem[]>) => {
+        (state, action: PayloadAction<any>) => {
           state.loading = false;
-          state.items = action.payload;
+          
+          // Check if payload has a 'cart' property (from syncCartAction) 
+          // or is the array itself (if fetchCart returns the array directly)
+          if (action.payload && action.payload.cart) {
+            state.items = action.payload.cart;
+          } else if (Array.isArray(action.payload)) {
+            state.items = action.payload;
+          } else {
+            // Fallback if data structure is unexpected
+            console.warn("Unexpected cart data format:", action.payload);
+          }
         }
       )
+
       // Handle Rejected (Explicitly for this slice's thunks)
       .addMatcher(
         (action) => action.type.startsWith('cart/') && action.type.endsWith('/rejected'),
@@ -99,7 +119,8 @@ const cartSlice = createSlice({
           state.loading = false;
           state.error = action.payload || "An unexpected error occurred";
         }
-      );
+      )
+   
   },
 });
 

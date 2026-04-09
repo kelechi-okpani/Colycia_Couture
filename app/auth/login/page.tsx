@@ -77,7 +77,8 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
    const result =  await dispatch(loginUser(formData)).unwrap();
    if(result){
-    router.push("/profile"); 
+      window.location.href = "/profile";
+    //  router.push("/profile"); 
    }
    console.log(result, "...login user")
   } catch (err) {

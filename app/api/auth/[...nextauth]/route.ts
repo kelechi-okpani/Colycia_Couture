@@ -49,6 +49,7 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token._id = user.id;
         token.firstName = (user as any).firstName;
         token.lastName = (user as any).lastName;
         token.wishlist = (user as any).wishlist;
@@ -60,6 +61,7 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        (session.user as any)._id = token.id;
         (session.user as any).firstName = token.firstName;
         (session.user as any).lastName = token.lastName;
         (session.user as any).wishlist = token.wishlist;
@@ -70,7 +72,8 @@ const handler = NextAuth({
   },
   session: { 
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 24 * 60 * 60, // 24 hours (86,400 seconds)
+    // maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
     signIn: '/auth/login', // Points to your custom login page

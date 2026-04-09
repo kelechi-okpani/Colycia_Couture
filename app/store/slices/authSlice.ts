@@ -65,12 +65,17 @@ export const loginUser = createAsyncThunk(
 
       const userId = (session.user as any).id;
       const res = await fetch(`/api/auth/profile?userId=${userId}`);
+      
       const dbUser = await res.json();
 
       if (!res.ok) return rejectWithValue(dbUser.error || "Failed to sync profile");
 
       // Format the ID for consistency (matching your console log)
-      return { ...dbUser, id: dbUser._id }; 
+      return { ...dbUser, 
+        _id: dbUser._id.toString(),
+        id: dbUser._id.toString(),
+        // id: dbUser._id
+       }; 
     } catch (err: any) {
       return rejectWithValue(err.message);
     }
