@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedPage && !token) {
     const loginUrl = new URL('/auth/login', request.url);
-    loginUrl.searchParams.set('callbackUrl', path); 
+    // loginUrl.searchParams.set('callbackUrl', path); 
     return NextResponse.redirect(loginUrl);
   }
 
