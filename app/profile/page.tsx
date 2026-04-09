@@ -32,6 +32,7 @@ export default function ProfilePage() {
   // Assuming you have a wishlist slice
   const { items: wishlistItems } = useAppSelector((state: any) => state.wishlist || { items: [] });
 
+  console.log(orders, "...orders")
   useEffect(() => {
     setMounted(true);
     // if (!authLoading && !user) router.push("/auth/login");
@@ -110,45 +111,93 @@ export default function ProfilePage() {
         </section>
 
         {/* --- RIGHT COLUMN: MY ORDERS --- */}
-        <section className="lg:col-span-2 space-y-4">
-          <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Scrollable Container for Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-500 uppercase text-xs font-bold border-b border-gray-100">
-                    <th className="px-6 py-4">Order ID</th>
-                    <th className="px-6 py-4">Products</th>
-                    <th className="px-6 py-4">Qty</th>
-                    <th className="px-6 py-4 text-nowrap">Date</th>
-                    <th className="px-6 py-4">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {orders?.map((order:any) => (
-                    <tr key={order.id} className="text-sm hover:bg-gray-50 transition">
-                      <td className="px-6 py-4 text-gray-500">#{order.id.slice(-6)}</td>
-                      <td className="px-6 py-4 font-medium text-gray-900">{order.items[0]?.name}...</td>
-                      <td className="px-6 py-4">{order.items.length}</td>
-                      <td className="px-6 py-4 text-gray-500 text-nowrap">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`font-semibold ${
-                          order.status === 'Delivered' ? 'text-green-500' :
-                          order.status === 'Pending' ? 'text-orange-500' : 'text-red-500'
-                        }`}>
-                          {order.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+   <section className="lg:col-span-2 space-y-4">
+  <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
+  <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead>
+          <tr className="bg-gray-50 text-gray-500 uppercase text-xs font-bold border-b border-gray-100">
+            <th className="px-6 py-4">Item</th>
+            <th className="px-6 py-4">Order ID</th>
+            <th className="px-6 py-4">Qty</th>
+            <th className="px-6 py-4">Price</th>
+            <th className="px-6 py-4 text-nowrap">Date</th>
+            <th className="px-6 py-4">Status</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {orders?.map((order: any) => 
+            order.items.map((item: any, index: number) => (
+              <tr key={`${order._id}-${index}`} className="text-sm hover:bg-gray-50 transition">
+                {/* 1. Product Image & Name */}
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-14 relative rounded bg-gray-100 overflow-hidden flex-shrink-0">
+                      <img 
+                        src={item.image} 
+                        alt={item.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 uppercase text-xs leading-tight">
+                        {item.name}
+                      </p>
+                      <p className="text-[10px] text-gray-400 uppercase tracking-tighter">
+                        Size: {item.size}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+
+                {/* 2. Order ID (Shortened) */}
+                <td className="px-6 py-4 text-gray-500 font-mono text-xs">
+                  #{order._id.slice(-6).toUpperCase()}
+                </td>
+
+                {/* 3. Item Quantity */}
+                <td className="px-6 py-4 font-medium text-gray-700">
+                  {item.quantity}
+                </td> 
+                
+                <td className="px-6 py-4 font-bold text-gray-900">
+                  ₦{item.price.toLocaleString()}
+                </td>
+
+                {/* 4. Order Date */}
+                <td className="px-6 py-4 text-gray-500 text-nowrap">
+                  {new Date(order.createdAt).toLocaleDateString("en-NG", {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </td>
+
+                {/* 5. Status Pill */}
+                <td className="px-6 py-4">
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    order.orderStatus === 'delivered' ? 'bg-green-50 text-green-600' :
+                    order.orderStatus === 'processing' ? 'bg-blue-50 text-blue-600' : 
+                    'bg-orange-50 text-orange-600'
+                  }`}>
+                    {order.orderStatus}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      
+      {(!orders || orders.length === 0) && (
+        <div className="p-16 text-center">
+          <p className="text-gray-400 italic text-sm">You haven't placed any orders yet.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
 
       </div>
     </div>

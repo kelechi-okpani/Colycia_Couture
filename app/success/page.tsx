@@ -15,29 +15,69 @@ function SuccessContent() {
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
 
-// Inside SuccessContent function in your success page file
+
+// useEffect(() => {
+//   const confirmOrder = async () => {
+//     if (sessionId) {
+//       try {
+//         // Trigger the backend update
+//         const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
+//         const data = await response.json();
+//         if (data.success) {
+//           dispatch(resetCartState());
+//           setLoading(false);
+//         } else {
+//           // If payment isn't confirmed yet, maybe redirect or show error
+//           console.error("Payment confirmation failed");
+//           setLoading(false);
+//         }
+//       } catch (err) {
+//         console.error("Error confirming order:", err);
+//         setLoading(false);
+//       }
+//     } else {
+//       router.push("/");
+//     }
+//   };
+//   confirmOrder();
+// }, [sessionId, dispatch, router]);
+
+
+
 useEffect(() => {
   const confirmOrder = async () => {
-    if (sessionId) {
-      try {
-        // Trigger the backend update
-        const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
-        const data = await response.json();
-
-        if (data.success) {
-          dispatch(resetCartState());
-          setLoading(false);
-        } else {
-          // If payment isn't confirmed yet, maybe redirect or show error
-          console.error("Payment confirmation failed");
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("Error confirming order:", err);
-        setLoading(false);
-      }
-    } else {
+    if (!sessionId) {
       router.push("/");
+      return;
+    }
+
+    try {
+      // 1. Verify payment and update order status in DB
+      const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
+      const data = await response.json();
+
+      if (data.success) {
+        // 2. Clear Redux State
+        dispatch(resetCartState());
+
+        // 3. Clear LocalStorage (In case your Redux persist doesn't catch it)
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("cart"); // Or whatever key you use
+        }
+
+        // 4. Clear Database Cart (If the user is logged in)
+        // We do this via a background fetch so it doesn't block the UI
+        await fetch('/api/cart/clear', { method: 'DELETE' });
+
+        setLoading(false);
+      } else {
+        console.error("Payment confirmation failed");
+        setLoading(false);
+        // Optional: router.push("/checkout?error=payment_failed");
+      }
+    } catch (err) {
+      console.error("Error confirming order:", err);
+      setLoading(false);
     }
   };
 
@@ -89,7 +129,7 @@ useEffect(() => {
 
         <div className="space-y-3">
           <Link 
-            href="/orders" 
+            href="/profile" 
             className="w-full flex items-center justify-center gap-2 bg-black text-white py-4 rounded-xl font-semibold hover:bg-gray-800 transition-all active:scale-[0.98]"
           >
             <IoBagHandleOutline className="text-xl" />

@@ -34,6 +34,11 @@ phone: {
     minlength: [6, "Password must be at least 6 characters"],
     select: false // Automatically hides password from API responses for security
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
   wishlist: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Product' 

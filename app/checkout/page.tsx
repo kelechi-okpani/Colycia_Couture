@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import { IoChevronDownOutline, IoShieldCheckmarkOutline, IoArrowBackOutline } from 'react-icons/io5';
+import { IoChevronDownOutline, IoShieldCheckmarkOutline, IoArrowBackOutline, IoLocationOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { RootState } from '../store/store';
@@ -13,12 +13,15 @@ import PaymentHandler from '../components/ui/PaymentHandler';
 
 
 export default function CheckoutPage() {
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const [selectedAddressIdx, setSelectedAddressIdx] = useState<number | null>(null);
+const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const { items } = useAppSelector((state: RootState) => state.cart);
+const { orders, status } = useAppSelector((state) => state.order);
+const { items } = useAppSelector((state: RootState) => state.cart);
   const user = useAppSelector((state: RootState) => state.auth.user);
 
-  // Form State
-  const [formData, setFormData] = useState({
+ const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phone: '',
@@ -29,8 +32,46 @@ export default function CheckoutPage() {
     zipCode: '',
   });
 
-  // Validation State
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+useEffect(() => {
+  if (orders && orders.length > 0) {
+    // Extract unique shipping details from the orders in Redux
+    const uniqueAddresses = orders.reduce((acc: any[], order: any) => {
+      const address = order?.shippingDetails;
+      if (!address) return acc;
+
+      // Check for duplicates based on address string and phone
+      const isDuplicate = acc.find(
+        (a) => a.address === address.address && a.phone === address.phone
+      );
+
+      if (!isDuplicate) acc.push(address);
+      return acc;
+    }, []);
+
+    setSavedAddresses(uniqueAddresses.slice(0, 3)); // Show the most recent 3
+  }
+}, [orders]);
+
+
+// 2. Prefill Form Logic
+  const selectAddress = (address: any, index: number) => {
+    setSelectedAddressIdx(index);
+    setFormData({
+      firstName: address.firstName || '',
+      lastName: address.lastName || '',
+      phone: address.phone || '',
+      email: user?.email || '',
+      address: address.address || '',
+      country: address.country || 'Nigeria',
+      state: address.state || '',
+      zipCode: address.zipCode || '',
+    });
+    // Clear validation errors when an address is selected
+    setErrors({});
+  };
+ 
+
 
   // Sync email if user logs in after page load
   useEffect(() => {
@@ -85,6 +126,39 @@ export default function CheckoutPage() {
           <IoArrowBackOutline /> Back to Cart
         </Link>
 
+              {savedAddresses.length > 0 && (
+                <div className="mb-10 space-y-4">
+                  <div className="flex items-center gap-2 text-neutral-400">
+                    <IoLocationOutline />
+                    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em]">Fast Fill Saved Addresses</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {savedAddresses.map((addr, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => selectAddress(addr, idx)}
+                        className={`text-left p-4 border transition-all duration-300 relative ${
+                          selectedAddressIdx === idx 
+                            ? 'bg-white border-black shadow-md ring-1 ring-black' 
+                            : 'bg-white/50 border-neutral-200 hover:border-neutral-400'
+                        }`}
+                      >
+                        <p className="font-bold text-[11px] uppercase text-black">{addr.firstName} {addr.lastName}</p>
+                        <p className="text-[10px] text-neutral-500 mt-1 line-clamp-1">{addr.address}</p>
+                        <p className="text-[9px] text-neutral-400 uppercase">{addr.state}, Nigeria</p>
+                        {selectedAddressIdx === idx && (
+                          <div className="absolute top-2 right-2 text-green-600">
+                            <IoShieldCheckmarkOutline size={14} />
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              
         <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left Column: Shipping Details */}

@@ -83,7 +83,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       // Force the redirect and return immediately to stop execution
       // window.location.assign("/profile"); 
       router.push("/profile"); 
-      // router.push("/shop"); 
       return; 
     }
   } catch (err) {
