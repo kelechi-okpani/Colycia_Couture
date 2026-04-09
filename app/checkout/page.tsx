@@ -94,59 +94,139 @@ export default function CheckoutPage() {
               <p className="text-neutral-500 text-sm mt-2">Please ensure your delivery information is accurate for Abuja Craftsmanship delivery.</p>
             </header>
             
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-1">
-                  <input name="firstName" value={formData.firstName} onChange={handleInputChange} type="text" placeholder="First Name" className={`w-full bg-white border ${errors.firstName ? 'border-red-500' : 'border-neutral-200'} px-4 py-4 rounded-sm outline-none focus:border-black transition-colors`} />
-                  {errors.firstName && <span className="text-[10px] text-red-500 uppercase font-bold tracking-tighter">{errors.firstName}</span>}
-                </div>
-                <div className="space-y-1">
-                  <input name="lastName" value={formData.lastName} onChange={handleInputChange} type="text" placeholder="Last Name" className={`w-full bg-white border ${errors.lastName ? 'border-red-500' : 'border-neutral-200'} px-4 py-4 rounded-sm outline-none focus:border-black transition-colors`} />
-                  {errors.lastName && <span className="text-[10px] text-red-500 uppercase font-bold tracking-tighter">{errors.lastName}</span>}
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" placeholder="Phone Number" className={`w-full bg-white border ${errors.phone ? 'border-red-500' : 'border-neutral-200'} px-4 py-4 rounded-sm outline-none focus:border-black transition-colors`} />
-                <input name="email" value={formData.email} onChange={handleInputChange} type="email" placeholder="Email Address" className="w-full bg-white border border-neutral-200 px-4 py-4 rounded-sm outline-none focus:border-black transition-colors" />
-              </div>
+           <div className=" mx-auto p-4 md:p-8 bg-[#F9F9F9] min-h-screen">
+              <div className="space-y-4">
+                {/* First Name */}
+                <input
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="First Name"
+                  className={`w-full bg-white border ${errors.firstName ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm`}
+                />
 
-              <input name="address" value={formData.address} onChange={handleInputChange} type="text" placeholder="Street Address / Suite / Apartment" className={`w-full bg-white border ${errors.address ? 'border-red-500' : 'border-neutral-200'} px-4 py-4 rounded-sm outline-none focus:border-black transition-colors`} />
+                {/* Last Name */}
+                <input
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Last Name"
+                  className={`w-full bg-white border ${errors.lastName ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm`}
+                />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Phone */}
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  type="tel"
+                  placeholder="Phone Number"
+                  className={`w-full bg-white border ${errors.phone ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm`}
+                />
+
+                {/* Email */}
+                <input
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  type="email"
+                  placeholder="Email Address"
+                  className="w-full bg-white border border-neutral-200 px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm"
+                />
+
+                {/* Address */}
+                <input
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Street Address / Suite / Apartment"
+                  className={`w-full bg-white border ${errors.address ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm`}
+                />
+
+                {/* Country Select */}
                 <div className="relative">
-                  <select name="country" className="w-full bg-neutral-100 border border-neutral-200 px-4 py-4 rounded-sm outline-none appearance-none cursor-not-allowed text-neutral-500">
+                  <select
+                    name="country"
+                    className="w-full bg-white border border-neutral-200 px-4 py-3.5 text-sm text-neutral-600 outline-none appearance-none cursor-pointer"
+                  >
                     <option value="Nigeria">Nigeria</option>
                   </select>
+                  <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
                 </div>
-                <div className="relative md:col-span-2">
-                  <select name="state" value={formData.state} onChange={handleInputChange} className={`w-full bg-white border ${errors.state ? 'border-red-500' : 'border-neutral-200'} px-4 py-4 rounded-sm outline-none appearance-none focus:border-black transition-colors`}>
-                    <option value="">Select State</option>
-                    <option value="Abuja">FCT - Abuja</option>
+
+                {/* State/City Select */}
+                <div className="relative">
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    className={`w-full bg-white border ${errors.state ? 'border-red-500' : 'border-neutral-200'} px-4 py-3.5 text-sm text-neutral-400 outline-none appearance-none cursor-pointer focus:border-black transition-colors`}
+                  >
+                    <option value="">State/city</option>
+                    <option value="Abuja">Abuja</option>
                     <option value="Lagos">Lagos</option>
-                    <option value="Rivers">Rivers (Port Harcourt)</option>
-                    <option value="Kano">Kano</option>
                   </select>
-                  <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                  <IoChevronDownOutline className="absolute right-4 top-1/2 -translate-y-1/2 text-black pointer-events-none" size={18} />
                 </div>
-              </div>
 
-              <input name="zipCode" value={formData.zipCode} onChange={handleInputChange} type="text" placeholder="Zip Code (Optional)" className="w-full bg-white border border-neutral-200 px-4 py-4 rounded-sm outline-none focus:border-black transition-colors" />
-            </div>
+                {/* Zip Code */}
+                <input
+                  name="zipCode"
+                  value={formData.zipCode}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder="Zip Code (Optional)"
+                  className="w-full bg-white border border-neutral-200 px-4 py-3.5 text-sm text-neutral-600 outline-none focus:border-black transition-colors shadow-sm"
+                />
 
-            {/* Final Action - Passing validation check to PaymentHandler */}
-            <div className="pt-8 border-t border-neutral-100">
+                {/* Delivery Method */}
+                <div className="pt-4 space-y-4">
+                  <h3 className="text-sm font-medium text-black">Delivery Method</h3>
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex items-center justify-center">
+                        <input 
+                            type="radio" 
+                            checked 
+                            readOnly 
+                            className="w-5 h-5 border-2 border-blue-900 rounded-full appearance-none checked:bg-white cursor-pointer" 
+                        />
+                        <div className="absolute w-2.5 h-2.5 bg-blue-900 rounded-full"></div>
+                    </div>
+                    <span className="text-sm text-neutral-800">Standard Delivery</span>
+                  </div>
+                </div>
+
+                {/* Shipping Fee */}
+                <div className="pt-2 flex items-center gap-4">
+                  <span className="text-sm text-neutral-600">Shipping Fee:</span>
+                  <span className="text-base font-bold text-black uppercase">NGN 5,000</span>
+                </div>
+
+                {/* Terms */}
+                <p className="text-[11px] text-neutral-500">
+                  I have Read and agreed to the <a href="#" className="text-blue-800 hover:underline">Terms and Conditions</a>
+                </p>
+
+             {/* Final Action - Passing validation check to PaymentHandler */}
+            <div className=" border-t border-neutral-100">
                <PaymentHandler 
                   items={items} 
                   formData={formData} 
                   userId={user?.id || user?._id}
                   onValidate={validateForm} 
                />
-               <div className="flex items-center justify-center gap-2 text-neutral-400 text-[10px] uppercase tracking-[0.3em] mt-6">
+               <div className="flex items-center  gap-2 text-neutral-400 text-[10px] uppercase tracking-[0.3em] mt-6">
                 <IoShieldCheckmarkOutline className="text-lg text-green-500" />
                 Secure Encryption via Stripe
               </div>
             </div>
+              </div>
+            </div>
+
+           
           </div>
 
           {/* Right Column: Order Summary */}

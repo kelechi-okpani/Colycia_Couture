@@ -30,12 +30,14 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
     state.wishlist.items.some((item) => item._id === _id)
   );
 
+
+  console.log(user, "user...")
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     // 1. Validation: Ensure user is logged in
-    if (!user?.id) {
+    if (!user?._id) {
       toast.error("Please login to add items to your bag", {
         style: { borderRadius: '0px', background: '#000', color: '#fff', fontSize: '12px' }
       });
@@ -53,7 +55,7 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
     try {
       // 3. Sync directly with MongoDB API
       await dispatch(syncCartAction({
-        userId: user.id,
+        userId: user?._id,
         productId: _id,
         quantity: 1,
         size: selectedSize,
@@ -72,6 +74,7 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
     }
   };
 
+
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -79,7 +82,7 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
       toast.error("Login to save to wishlist");
       return;
     }
-    dispatch(toggleWishlistApi({ userId: user.id, productId: _id }));
+    dispatch(toggleWishlistApi({ userId: user?._id, productId: _id }));
   };
 
   return (

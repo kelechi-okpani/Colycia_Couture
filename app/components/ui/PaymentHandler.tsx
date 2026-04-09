@@ -49,9 +49,9 @@ export default function PaymentHandler({ items, formData, userId, onValidate }: 
     <button
       onClick={handlePayment}
       disabled={loading || items.length === 0}
-      className="w-full flex items-center justify-center gap-3 bg-black text-white px-12 py-5 font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-xl disabled:opacity-30"
+      className="rounded-lg flex items-center justify-center gap-3 bg-black text-white px-12 py-5 font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-xl disabled:opacity-30"
     >
-      {loading ? "Initializing Secure Payment..." : "Complete Order"}
+      {loading ? "Initializing Secure Payment..." : " Pay Now"}
     </button>
   );
 }

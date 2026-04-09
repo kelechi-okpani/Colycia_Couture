@@ -148,18 +148,42 @@ export default function AddProductPage() {
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Category</label>
-                <select 
-                  className="w-full text-xl border-b border-neutral-100 py-4 outline-none focus:border-black bg-transparent appearance-none cursor-pointer"
-                  onChange={(e) => setFormData({...formData, category: e.target.value})}
-                >
-                  <option value="KAFTANS">Kaftans</option>
-                  <option value="AGBADA">Agbada</option>
-                  <option value="SUITS">Suits</option>
-                  <option value="SHIRTS">Shirts</option>
-                </select>
-              </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
+                Category
+              </label>
+          <div className="relative">
+            <select 
+              value={formData.category}
+              className="w-full text-xl border-b border-neutral-100 py-4 outline-none focus:border-black bg-transparent appearance-none cursor-pointer transition-colors"
+              onChange={(e) => setFormData({...formData, category: e.target.value})}
+            >
+              {[
+                'AGBADA', 
+                'KAFTANS', 
+                'SENATOR', 
+                'SHIRTS', 
+                'SUITS', 
+                'SAFARI', 
+                'KIMONOS', 
+                'CO-ORDS', 
+                'BLAZERS', 
+                'TROUSERS'
+              ].map((cat) => (
+                <option key={cat} value={cat} className="text-base py-2">
+                  {cat.charAt(0) + cat.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+            
+            {/* Minimalist Custom Arrow */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-neutral-400">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
             </div>
 
             <div className="space-y-2">

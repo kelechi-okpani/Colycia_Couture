@@ -21,11 +21,19 @@ interface AuthState {
 // Helper: Persist user state to local storage for page refreshes
 const loadUserFromStorage = () => {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('colycia_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('colycia_user');
+      return (saved && saved !== "undefined") ? JSON.parse(saved) : null;
+    } catch (e) {
+      console.error("Corrupted localStorage found, clearing...");
+      localStorage.removeItem('colycia_user');
+      return null;
+    }
   }
   return null;
 };
+
+
 
 const initialState: AuthState = {
   user: loadUserFromStorage(),
@@ -56,7 +64,7 @@ export const loginUser = createAsyncThunk(
       if (!session?.user) return rejectWithValue("Session authentication failed");
 
       const userId = (session.user as any).id;
-      const res = await fetch(`/api/user/profile?userId=${userId}`);
+      const res = await fetch(`/api/auth/profile?userId=${userId}`);
       const dbUser = await res.json();
 
       if (!res.ok) return rejectWithValue(dbUser.error || "Failed to sync profile");

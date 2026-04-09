@@ -13,8 +13,7 @@ export default function BestSellers() {
   const { items, status, error } = useAppSelector((state) => state.products);
 
   // 2. Fetch data from MongoDB via API on component mount
-  useEffect(() => {
-    // Only fetch if data isn't already loaded or if you want a fresh pull
+    useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts());
     }
@@ -22,10 +21,11 @@ export default function BestSellers() {
 
   // 3. Logic: Filter for 'featured' items or simply show the top 8 products
   const bestSellers = items && items.length > 0 
-    ? items.filter((p: any) => p.featured).slice(0, 8) 
+    ? items.filter((p: any) => p.name).slice(0, 8) 
     : items?.slice(0, 8);
 
   // --- RENDER STATES ---
+
 
   // Loading State: Show skeletons while fetching
   if (status === 'loading') {
@@ -46,13 +46,13 @@ export default function BestSellers() {
   }
 
   // Error State
-  if (status === 'failed') {
-    return (
-      <div className="py-24 text-center">
-        <p className="text-red-500 text-sm tracking-widest uppercase">Error loading products: {error}</p>
-      </div>
-    );
-  }
+  // if (status === 'failed') {
+  //   return (
+  //     <div className="py-24 text-center">
+  //       <p className="text-red-500 text-sm tracking-widest uppercase">Error loading products: {error}</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <section className="py-24 bg-white">
@@ -67,13 +67,20 @@ export default function BestSellers() {
         {/* Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
           {bestSellers?.map((product: any) => (
-            <ProductCard 
-              key={product._id} 
-              _id={product._id} 
-              name={product.name} 
-              price={product.price} 
-              imageUrl={product.image} // Mapping DB 'image' to 'imageUrl'
-            />
+            // <ProductCard 
+            //   key={product._id} 
+            //   _id={product._id} 
+            //   name={product.name} 
+            //   price={product.price} 
+            //   imageUrl={product.image} // Mapping DB 'image' to 'imageUrl'
+            // />
+
+               <ProductCard
+                 key={product._id}
+                 {...product}
+                 _id={product._id.toString()}
+                 imageUrl={product.image} 
+               />
           ))}
         </div>
 

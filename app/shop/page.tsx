@@ -79,8 +79,20 @@ export default function ShopPage() {
         <div className="flex flex-wrap justify-between items-center gap-4 mb-10">
           <div className="flex gap-4">
              <FilterDropdown 
-              label="Category" 
-              options={["All", "AGBADA", "KAFTANS", "SUITS", "UNISEX"]} 
+              label="Category"
+              // options={["All", "AGBADA", "KAFTANS", "SUITS", "UNISEX"]} 
+               options={[
+                  'All', 
+                  'AGBADA', 
+                  'KAFTANS', 
+                  'SHIRTS', 
+                  'SUITS', 
+                  'CASUAL', 
+                  'DANSIKI', 
+                  'ADIRE', 
+                  'KAFTAN', 
+                ]} 
+            
               value={categoryFilter} 
               onChange={setCategoryFilter} 
              />
@@ -124,10 +136,10 @@ export default function ShopPage() {
                 ))}
             </div>
 
-            {filteredProducts.length === 0 && (
+            {/* {filteredProducts.length === 0 && (
                <ProductNotFound error={' No products found matching your search'}/>
            
-            )}
+            )} */}
           </>
         )}
       </div>

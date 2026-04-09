@@ -89,7 +89,7 @@ export default function WishlistPage() {
             <div key={item._id} className="group flex flex-col">
               {/* Image Container */}
               <div className="relative aspect-[3/4] bg-neutral-100 overflow-hidden shadow-sm">
-                <Link href={`/product/${item._id}`}>
+                <Link href={`/shop/${item._id}`}>
                     <Image
                     src={item.image || '/assets/placeholder.png'}
                     alt={item.name}

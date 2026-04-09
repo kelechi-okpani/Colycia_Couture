@@ -88,70 +88,91 @@ const handleRemoveItem = (productId: string, size: string) => {
   }
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 pt-32 pb-24 relative isolate">
-      {/* Loading Overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-50 flex items-start justify-center pt-60">
-          <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
+   <div className="min-h-screen bg-white text-neutral-900 pt-20 pb-24 relative isolate font-sans">
+  {/* Loading Overlay */}
+  {loading && (
+    <div className="fixed inset-0 bg-white/60 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  )}
 
-      <main className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-neutral-100 pb-10">
-          <div className="flex items-center gap-4">
-            <h1 className="text-4xl font-bold tracking-tighter text-black uppercase">Your Bag</h1>
-            <span className="text-xs font-bold text-neutral-300 tracking-widest">({items.length} ITEMS)</span>
-          </div>
-          <Link href="/shop" className="text-[10px] font-bold uppercase tracking-[0.3em] border-b border-black pb-1 hover:text-neutral-500 hover:border-neutral-500 transition-all">
-            Back to Shopping
-          </Link>
-        </header>
+  <main className="max-w-7xl mx-auto px-4 md:px-10 relative z-10">
+    {/* Header Section */}
+    <div className="flex justify-between items-center mb-8">
+      <h1 className="text-xl md:text-2xl font-bold text-black">
+        Your Cart ({items.length})
+      </h1>
+      <Link href="/shop" className="text-[11px] font-bold uppercase tracking-widest border-b-2 border-black pb-0.5 hover:text-neutral-500 hover:border-neutral-500 transition-all">
+        Continue Shopping
+      </Link>
+    </div>
 
-        {/* Desktop Table Headers */}
-        <div className="hidden md:grid grid-cols-12 gap-4 pb-6 text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400">
-          <div className="col-span-6">Product Details</div>
-          <div className="col-span-3 text-center">Quantity</div>
-          <div className="col-span-3 text-right">Total</div>
-        </div>
+    {/* Table Headers */}
+    <div className="bg-neutral-50 grid grid-cols-12 gap-4 py-4 px-6 text-[12px] font-bold text-neutral-800">
+      <div className="col-span-6 md:col-span-5">Item</div>
+      <div className="hidden md:block col-span-3 text-center">Quantity</div>
+      <div className="hidden md:block col-span-3 text-center">Price</div>
+      <div className="md:col-span-1"></div>
+    </div>
 
-        {/* Cart Items Loop */}
-     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+    {/* Cart Items Loop */}
+    <div className="divide-y divide-neutral-100">
       {items.map((item) => (
-        <div key={`${item.productId}-${item.size}`} className="flex items-center justify-between border-b py-4">
-          <div className="flex items-center gap-4">
-            <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
-            <div>
-              <h2 className="font-medium">{item.name}</h2>
-              <p className="text-sm text-gray-500">Size: {item.size}</p>
-              <p className="font-semibold">${item.price}</p>
+        <div key={`${item.productId}-${item.size}`} className="grid grid-cols-12 gap-4 py-8 px-6 items-center">
+          {/* Product Details */}
+          <div className="col-span-12 md:col-span-5 flex items-center gap-6">
+            <img src={item.image} alt={item.name} className="w-24 h-24 md:w-32 md:h-32 object-cover" />
+            <div className="space-y-1">
+              <h2 className="text-sm md:text-base font-bold text-black">{item.name}</h2>
+              
+              {/* <p className="text-[11px] text-neutral-500">Color: {item?.color || 'Charcoal Grey'}</p> */}
+             
+              <p className="text-[11px] text-neutral-500">Size: {item.size}</p>
+              {/* Mobile Only: Price & Qty shown here */}
+              <div className="md:hidden flex flex-col gap-2 pt-2">
+                 <p className="font-bold">₦{item.price.toLocaleString()} NGN</p>
+                 <div className="flex items-center border w-fit">
+                    <button onClick={() => handleUpdateQuantity(item.productId, item.size, item.quantity - 1)} className="p-2"> <IoRemoveOutline /> </button>
+                    <span className="px-3 text-xs">{item.quantity}</span>
+                    <button onClick={() => handleUpdateQuantity(item.productId, item.size, item.quantity + 1)} className="p-2"> <IoAddOutline /> </button>
+                 </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            {/* Quantity Controls */}
-            <div className="flex items-center border rounded-lg">
+          {/* Desktop Quantity */}
+          <div className="hidden md:flex col-span-3 justify-center">
+            <div className="flex items-center border border-neutral-200">
               <button 
                 onClick={() => handleUpdateQuantity(item.productId, item.size, item.quantity - 1)}
-                className="p-2 hover:bg-gray-100 disabled:opacity-50"
+                className="p-3 hover:bg-neutral-50 disabled:opacity-30"
                 disabled={loading || item.quantity <= 1}
               >
-                <IoRemoveOutline size={16} />
+                <IoRemoveOutline size={14} />
               </button>
-              <span className="px-4 font-medium">{item.quantity}</span>
+              <span className="px-6 font-medium text-sm">{item.quantity}</span>
               <button 
                 onClick={() => handleUpdateQuantity(item.productId, item.size, item.quantity + 1)}
-                className="p-2 hover:bg-gray-100"
+                className="p-3 hover:bg-neutral-50"
                 disabled={loading}
               >
-                <IoAddOutline size={16} />
+                <IoAddOutline size={14} />
               </button>
             </div>
+          </div>
 
-            {/* Remove Button */}
+          {/* Desktop Price */}
+          <div className="hidden md:block col-span-3 text-center">
+            <p className="font-bold text-sm tracking-tight text-neutral-800">
+              {item.price.toLocaleString()}.00 NGN
+            </p>
+          </div>
+
+          {/* Remove Button */}
+          <div className="col-span-1 text-right">
             <button 
               onClick={() => handleRemoveItem(item.productId, item.size)}
-              className="text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors"
+              className="text-neutral-400 hover:text-black transition-colors p-2"
               disabled={loading}
             >
               <IoTrashOutline size={20} />
@@ -161,43 +182,27 @@ const handleRemoveItem = (productId: string, size: string) => {
       ))}
     </div>
 
-        {/* Checkout Footer */}
-        <div className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-7">
-                <div className="p-8 bg-neutral-50 space-y-4">
-                    <h4 className="text-[11px] font-black uppercase tracking-[0.2em]">Complimentary Services</h4>
-                    <p className="text-[11px] text-neutral-500 leading-relaxed font-light">
-                        Enjoy free standard shipping on all Abuja orders. Each piece is handcrafted to your size specifications.
-                    </p>
-                </div>
-            </div>
-
-            <div className="lg:col-span-5 space-y-8">
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center text-neutral-400 text-[10px] font-bold uppercase tracking-widest">
-                        <span>Total Items</span>
-                        <span>{items.reduce((acc, curr) => acc + curr.quantity, 0)}</span>
-                    </div>
-                    <div className="flex justify-between items-end">
-                        <span className="text-[11px] font-black uppercase tracking-[0.3em]">Estimated Total</span>
-                        <p className="text-4xl font-bold text-black tracking-tighter">₦{totalAmount.toLocaleString()}</p>
-                    </div>
-                </div>
-                
-                <div className="flex flex-col gap-4">
-                    <Link href="/checkout" className="bg-black text-white py-5 px-12 text-[11px] font-black tracking-[0.4em] uppercase hover:bg-neutral-800 transition-all text-center shadow-2xl active:scale-95">
-                        Proceed to Checkout
-                    </Link>
-                    <button 
-                        onClick={handleClearCart}
-                        className="text-[9px] font-bold uppercase tracking-[0.3em] text-neutral-300 hover:text-red-500 transition-colors text-center py-2"
-                    >
-                        Clear Bag
-                    </button>
-                </div>
-            </div>
+    {/* Checkout Footer Section */}
+    <div className="mt-10 bg-neutral-50 py-10 px-6 md:px-10">
+      <div className="max-w-md ml-auto space-y-6 text-right">
+        <div className="space-y-2">
+           <div className="flex justify-end items-baseline gap-4">
+             <span className="text-[12px] font-bold uppercase tracking-widest text-neutral-800">Subtotal</span>
+             <p className="text-lg font-bold text-black">
+                ₦{totalAmount.toLocaleString()}.00 NGN
+             </p>
+           </div>
+           <p className="text-[10px] text-neutral-400 italic">
+             *Promotions, Discounts And Shipping Fees Are Calculated At Checkout
+           </p>
         </div>
-      </main>
+        
+        <Link href="/checkout" className="block w-full bg-black text-white py-4 text-[12px] font-bold tracking-[0.3em] uppercase hover:bg-neutral-800 transition-all text-center">
+            Checkout
+        </Link>
+      </div>
     </div>
+  </main>
+</div>
   );
 }

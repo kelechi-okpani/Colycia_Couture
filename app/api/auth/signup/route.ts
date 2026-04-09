@@ -8,10 +8,10 @@ export async function POST(req: Request) {
   try {
     await dbConnect();
     
-    const { firstName, lastName, email, password } = await req.json();
+    const { firstName, lastName, email, phone, password } = await req.json();
 
     // 1. Basic Validation
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !phone || !password) {
       return NextResponse.json(
         { error: "All fields are required" }, 
         { status: 400 }
@@ -36,6 +36,7 @@ export async function POST(req: Request) {
       firstName, 
       lastName, 
       email, 
+      phone,
       password: hashedPassword 
     });
 

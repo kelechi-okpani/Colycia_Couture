@@ -17,6 +17,7 @@ export default function RegisterPage() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
   });
 
@@ -31,6 +32,7 @@ export default function RegisterPage() {
     const errors: Record<string, string> = {};
     if (formData.firstName.length < 2) errors.firstName = "First name is too short";
     if (formData.lastName.length < 2) errors.lastName = "Last name is too short";
+    if (formData.phone.length < 2) errors.phone = "Phone number is required";
     if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = "Invalid email address";
     if (formData.password.length < 6) errors.password = "Password must be at least 6 characters";
     
@@ -57,6 +59,18 @@ export default function RegisterPage() {
     }
   };
 
+
+  const handlePhone = (e:any) => {
+  const { name, value } = e.target;
+
+  if (name === "phone") {
+    // Only update if the value is digits
+    const sanitizedValue = value.replace(/[^0-9]/g, '');
+    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+  } else {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="about-bg-watermark" aria-hidden="true" />
@@ -102,6 +116,30 @@ export default function RegisterPage() {
               />
               {formErrors.lastName && <span className="text-[10px] text-red-500 mt-1">{formErrors.lastName}</span>}
             </div>
+
+             <div className="group">
+            <input
+              name="phone"
+              type="text" // Use "text" or "tel" instead of "phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={(e) => {
+                // Regex: replace anything that is NOT a digit (0-9) with an empty string
+                const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+                
+                // Call your existing handleChange with a fake event object or update state directly
+                handlePhone({
+                  target: {
+                    name: 'phone',
+                    value: onlyNums
+                  }
+                });
+              }}
+              className={`w-full px-4 py-3 border ${formErrors.phone ? 'border-red-400' : 'border-neutral-200'} focus:outline-none focus:border-neutral-900 transition-all placeholder:text-neutral-400 font-light`}
+            />
+              {formErrors.phone && <span className="text-[10px] text-red-500 mt-1">{formErrors.phone}</span>}
+            </div>
+
 
             <div className="group">
               <input

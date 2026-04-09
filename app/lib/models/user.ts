@@ -10,7 +10,16 @@ const UserSchema = new mongoose.Schema({
     type: String, 
     required: [true, "Last name is required"],
     trim: true 
-  },
+  },  
+  
+phone: {
+  type: String,
+  required: [true, "Phone number is required"],
+  trim: true,
+      minlength: [11, "Phone number must be at least 11 digits"],
+    maxlength: [15, "Phone number is too long"],
+},
+
   email: { 
     type: String, 
     required: [true, "Email is required"], 

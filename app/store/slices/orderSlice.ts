@@ -87,21 +87,31 @@ const initialState: OrderState = {
 export const fetchOrders = createAsyncThunk(
   'orders/fetchAll',
   async ({ userId, isAdmin }: { userId?: string; isAdmin?: boolean }, { rejectWithValue }) => {
+    // GUARD: If not admin and no userId, don't even call the API
+    if (!isAdmin && !userId) {
+      return rejectWithValue("No user ID provided");
+    }
+
     try {
       const url = isAdmin 
         ? '/api/orders?isAdmin=true' 
         : `/api/orders?userId=${userId}`;
         
       const res = await fetch(url);
-      const data = await res.json();
-      
-      if (!res.ok) return rejectWithValue(data.error || "Failed to fetch orders");
-      return data;
+
+      // Handle non-JSON responses (prevents the "unexpected character" error)
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ error: "Server Error" }));
+        return rejectWithValue(errorData.error || "Failed to fetch orders");
+      }
+
+      return await res.json();
     } catch (err: any) {
       return rejectWithValue(err.message);
     }
   }
 );
+
 
 export const fetchOrderById = createAsyncThunk(
   'orders/fetchOne',

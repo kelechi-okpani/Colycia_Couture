@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-import { INITIAL_PRODUCTS } from '../../data/data';
 
 
 // Dummy garment images for the slider

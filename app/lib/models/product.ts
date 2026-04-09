@@ -17,8 +17,18 @@ const ProductSchema = new mongoose.Schema({
   category: { 
     type: String, 
     required: true,
-    enum: ['AGBADA', 'KAFTANS', 'SHIRTS', 'SUITS'],
-    uppercase: true
+    uppercase: true,
+    enum: [
+          'AGBADA', 
+          'KAFTANS', 
+          'SHIRTS', 
+          'SUITS', 
+          'CASUAL', 
+          'DANSIKI', 
+          'ADIRE', 
+          'KAFTAN',
+    ],
+    
   },
   // Primary image for the shop grid
   image: { 
