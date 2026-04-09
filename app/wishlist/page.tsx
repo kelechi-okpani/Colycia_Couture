@@ -27,13 +27,13 @@ export default function WishlistPage() {
 
   // 3. Remove Item from Wishlist
   const handleRemove = (productId: string) => {
-      if (!user?.id) return;
-      dispatch(toggleWishlistApi({ userId: user.id, productId }));
+      if (!user?._id) return;
+      dispatch(toggleWishlistApi({ userId: user._id, productId }));
     };
 
   // 4. Move to Cart (Sync with Database)
   const handleMoveToCart = (product: any) => {
-      if (!user?.id) return;
+      if (!user?._id) return;
       // Move to cart (assumes default size 'M' or similar)
       dispatch(syncCartAction({
         userId: user.id,

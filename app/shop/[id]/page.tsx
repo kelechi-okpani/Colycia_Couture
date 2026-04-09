@@ -123,7 +123,7 @@ export default function ProductDetail() {
             if (newQuantity < 1) return; // Prevent 0 or negative quantities
             
             dispatch(syncCartAction({
-              userId: user?.id as any,
+              userId: user?._id as any,
               productId,
               size,
               quantity: newQuantity,

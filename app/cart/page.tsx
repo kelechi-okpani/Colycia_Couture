@@ -23,8 +23,8 @@ export default function CartPage() {
   // 2. Fetch fresh data from MongoDB on mount
   useEffect(() => {
     setIsMounted(true);
-    if (user?.id) {
-      dispatch(fetchCart(user.id));
+    if (user?._id) {
+      dispatch(fetchCart(user._id));
     }
   }, [dispatch, user?._id]);
 
@@ -36,7 +36,7 @@ export default function CartPage() {
       if (newQuantity < 1) return; // Prevent 0 or negative quantities
       
       dispatch(syncCartAction({
-        userId: user?.id as any,
+        userId: user?._id as any,
         productId,
         size,
         quantity: newQuantity,
@@ -47,7 +47,7 @@ export default function CartPage() {
 
 const handleRemoveItem = (productId: string, size: string) => {
     dispatch(syncCartAction({
-      userId: user?.id as any,
+      userId: user?._id as any,
       productId,
       size,
       action: 'remove'

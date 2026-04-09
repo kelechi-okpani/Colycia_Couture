@@ -27,14 +27,13 @@ export default function Navbar() {
   const cartItems = useAppSelector((state:any) => state.cart.items);
   const wishlistItems = useAppSelector((state:any) => state.wishlist.items);
 
-
   // 2. Fetch User Data from DB on mount
   useEffect(() => {
     setMounted(true);
-    if (user?.id) {
-      dispatch(fetchCart(user.id));
+    if (user?._id) {
+      dispatch(fetchCart(user._id));
     }
-  }, [user?.id, dispatch]);
+  }, [user?._id, dispatch]);
 
   // Prevent Hydration mismatch (Server vs Client count differences)
   const cartCount = mounted ? cartItems.length : 0;
@@ -77,12 +76,12 @@ export default function Navbar() {
             
             {/* User Profile / Login */}
         {mounted && (
-            user?.id ? (
+            user?._id ? (
               <Link href="/profile">
                 <User className="h-5 w-5 cursor-pointer text-neutral-600 hover:text-black transition-colors" />
               </Link>
             ) : (
-              <Link href="/auth/login">
+              <Link href="/auth/login" replace={true}>
                 <User className="h-5 w-5 cursor-pointer text-neutral-600 hover:text-black transition-colors" />
               </Link>
             )
