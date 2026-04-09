@@ -70,7 +70,6 @@ export default function LoginPage() {
   }
 };
 
-  //  router.push("/profile"); 
   
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -82,7 +81,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     if (result) {
       console.log("Login successful, redirecting...", result);
       // Force the redirect and return immediately to stop execution
-      window.location.assign("/profile"); 
+      // window.location.assign("/profile"); 
+      router.push("/profile"); 
       return; 
     }
   } catch (err) {
