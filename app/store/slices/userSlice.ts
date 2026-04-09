@@ -16,17 +16,17 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<any>) => {
       state.profile = action.payload;
-      localStorage.setItem('colycia_user', JSON.stringify(action.payload));
+      // localStorage.setItem('colycia_user', JSON.stringify(action.payload));
     },
     clearUser: (state) => {
       state.profile = null;
-      localStorage.removeItem('colycia_user');
+      // localStorage.removeItem('colycia_user');
     },
     // Call this specifically when the cart or wishlist is updated via API
     syncUserActivity: (state, action: PayloadAction<{ cart?: any[]; wishlist?: any[] }>) => {
       if (state.profile) {
         state.profile = { ...state.profile, ...action.payload };
-        localStorage.setItem('colycia_user', JSON.stringify(state.profile));
+        // localStorage.setItem('colycia_user', JSON.stringify(state.profile));
       }
     },
   },

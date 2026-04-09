@@ -50,11 +50,18 @@ const saveProductsToStorage = (state: ProductState) => {
 
 // --- Initial State ---
 
-const persistedData = loadProductsFromStorage();
+// const persistedData = loadProductsFromStorage();
+
+// const initialState: ProductState = {
+//   items: persistedData.items || [],
+//   currentProduct: persistedData.currentProduct || null,
+//   status: 'idle',
+//   error: null,
+// };
 
 const initialState: ProductState = {
-  items: persistedData.items || [],
-  currentProduct: persistedData.currentProduct || null,
+  items: [],
+  currentProduct: null,
   status: 'idle',
   error: null,
 };
@@ -120,7 +127,7 @@ const productSlice = createSlice({
   reducers: {
     clearCurrentProduct: (state) => {
       state.currentProduct = null;
-      saveProductsToStorage(state);
+      // saveProductsToStorage(state);
     }
   },
   extraReducers: (builder) => {
@@ -128,7 +135,7 @@ const productSlice = createSlice({
 
      .addCase(createProduct.fulfilled, (state, action: PayloadAction<Product>) => {
         state.items.unshift(action.payload);
-        saveProductsToStorage(state);
+        // saveProductsToStorage(state);
       })
       // Fetch All
       .addCase(fetchProducts.pending, (state) => {
@@ -137,7 +144,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
         state.status = 'succeeded';
         state.items = action.payload;
-        saveProductsToStorage(state); // Persist shop list
+        // saveProductsToStorage(state); // Persist shop list
       })
       .addCase(fetchProducts.rejected, (state, action: any) => {
         state.status = 'failed';
@@ -146,7 +153,7 @@ const productSlice = createSlice({
       // Fetch One
       .addCase(fetchProductById.fulfilled, (state, action: PayloadAction<Product>) => {
         state.currentProduct = action.payload;
-        saveProductsToStorage(state); // Persist specific product detail
+        // saveProductsToStorage(state); // Persist specific product detail
       });
   },
 });

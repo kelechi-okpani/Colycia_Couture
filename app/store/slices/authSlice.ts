@@ -36,7 +36,8 @@ const loadUserFromStorage = () => {
 
 
 const initialState: AuthState = {
-  user: loadUserFromStorage(),
+  // user: loadUserFromStorage(),
+  user: null,
   loading: false,
   error: null,
   successMessage: null,
@@ -150,9 +151,9 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.user = action.payload;
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('colycia_user', JSON.stringify(action.payload));
-        }
+        // if (typeof window !== 'undefined') {
+        //   localStorage.setItem('colycia_user', JSON.stringify(action.payload));
+        // }
       })
       // Logout
       .addCase(logoutUser.fulfilled, (state) => {

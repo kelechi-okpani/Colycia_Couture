@@ -36,7 +36,8 @@ const saveWishlistToStorage = (items: Product[]) => {
 
 
 const initialState: WishlistState = {
-  items: loadWishlistFromStorage(),
+  // items: loadWishlistFromStorage(),
+  items: [],
   loading: false,
   error: null,
   status: 'idle' 
@@ -85,7 +86,7 @@ const wishlistSlice = createSlice({
     clearWishlist: (state) => {
       state.items = [];
       state.error = null;
-      saveWishlistToStorage([]); // Clear storage too
+      // saveWishlistToStorage([]); // Clear storage too
     }
   },
   extraReducers: (builder) => {
@@ -96,7 +97,7 @@ const wishlistSlice = createSlice({
       .addCase(fetchWishlist.fulfilled, (state, action: PayloadAction<Product[]>) => {
         state.status = 'succeeded';
         state.items = action.payload;
-        saveWishlistToStorage(state.items); // Sync storage with API result
+        // saveWishlistToStorage(state.items); // Sync storage with API result
       })
       .addCase(fetchWishlist.rejected, (state, action: any) => {
         state.status = 'failed';
@@ -104,7 +105,7 @@ const wishlistSlice = createSlice({
       })
       .addCase(toggleWishlistApi.fulfilled, (state, action: PayloadAction<Product[]>) => {
         state.items = action.payload;
-        saveWishlistToStorage(state.items); // Sync storage after toggle
+        // saveWishlistToStorage(state.items); // Sync storage after toggle
       });
   },
 });

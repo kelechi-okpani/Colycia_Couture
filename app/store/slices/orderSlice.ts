@@ -73,11 +73,19 @@ const saveOrdersToStorage = (state: OrderState) => {
 
 // --- Initial State ---
 
-const persistedData = loadOrdersFromStorage();
+// const persistedData = loadOrdersFromStorage();
+// const initialState: OrderState = {
+//   orders: persistedData.orders || [],
+//   currentOrder: persistedData.currentOrder || null,
+//   status: 'idle',
+//   error: null,
+// };
+
+const persistedData = null
 
 const initialState: OrderState = {
-  orders: persistedData.orders || [],
-  currentOrder: persistedData.currentOrder || null,
+  orders:  [],
+  currentOrder: null,
   status: 'idle',
   error: null,
 };
@@ -174,7 +182,7 @@ const orderSlice = createSlice({
   reducers: {
     clearCurrentOrder: (state) => {
       state.currentOrder = null;
-      saveOrdersToStorage(state);
+      // saveOrdersToStorage(state);
     },
     resetOrderStatus: (state) => {
       state.status = 'idle';
@@ -190,7 +198,7 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.fulfilled, (state, action: PayloadAction<Order[]>) => {
         state.status = 'succeeded';
         state.orders = action.payload;
-        saveOrdersToStorage(state); // Save fetched list
+        // saveOrdersToStorage(state); // Save fetched list
       })
       .addCase(fetchOrders.rejected, (state, action: any) => {
         state.status = 'failed';
@@ -204,7 +212,7 @@ const orderSlice = createSlice({
         if (state.currentOrder?._id === action.payload._id) {
           state.currentOrder = action.payload; // Update detailed view if open
         }
-        saveOrdersToStorage(state);
+        // saveOrdersToStorage(state);
       });
       // Fetch Single Order
       // .addCase(fetchOrderById.fulfilled, (state, action: PayloadAction<Order>) => {
