@@ -40,25 +40,48 @@ export default function LoginPage() {
     return isValid;
   };
 
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFormData({ ...formData, [e.target.type]: e.target.value });
+  //   if (formErrors[e.target.type as keyof typeof formErrors]) {
+  //     setFormErrors({ ...formErrors, [e.target.type]: "" });
+  //   }
+  // };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!validate()) return;
+
+  //   const result = await dispatch(loginUser(formData));
+  //   console.log(result, "result")
+  //   // console.log(result?.meta?.requestStatus === "fulfilled", "fulfilled ...result")
+  //   // if (loginUser.fulfilled.match(result)) {
+  //   if (result?.meta?.requestStatus === "fulfilled") {
+  //     router.push("/profile"); // Redirect to home or dashboard on success
+  //   }
+  // };
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.type]: e.target.value });
-    if (formErrors[e.target.type as keyof typeof formErrors]) {
-      setFormErrors({ ...formErrors, [e.target.type]: "" });
-    }
-  };
+  const { name, value } = e.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+  
+  if (formErrors[name as keyof typeof formErrors]) {
+    setFormErrors(prev => ({ ...prev, [name]: "" }));
+  }
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validate()) return;
 
-    const result = await dispatch(loginUser(formData));
-    console.log(result, "result")
-    // console.log(result?.meta?.requestStatus === "fulfilled", "fulfilled ...result")
-    // if (loginUser.fulfilled.match(result)) {
-    if (result?.meta?.requestStatus === "fulfilled") {
-      router.push("/profile"); // Redirect to home or dashboard on success
-    }
-  };
+  try {
+    await dispatch(loginUser(formData)).unwrap();
+    router.push("/profile"); 
+  } catch (err) {
+    console.error("Failed to login:", err);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative">
@@ -85,6 +108,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div className="flex flex-col">
               <input
+              name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -96,6 +120,7 @@ export default function LoginPage() {
 
             <div className="flex flex-col">
               <input
+              name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
