@@ -145,7 +145,6 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.user = action.payload;
-       
         if (typeof window !== 'undefined') {
           localStorage.setItem('colycia_user', JSON.stringify(action.payload));
         }
