@@ -120,7 +120,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      await signOut({ redirect: false });
+      await signOut({ redirect: true });
 
       if (typeof window !== 'undefined') {
         localStorage.removeItem('colycia_user');

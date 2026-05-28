@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           firstName: user.firstName,
           lastName: user.lastName,
+          role: user.role,
           email: user.email,
           wishlist: user.wishlist || [],
           cart: user.cart || [],
@@ -47,6 +48,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token._id = user.id;
+        token.role = (user as any).role;
         token.firstName = (user as any).firstName;
         token.lastName = (user as any).lastName;
         token.wishlist = (user as any).wishlist;
@@ -58,6 +60,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as any).id = token.id;
         (session.user as any)._id = token.id;
+        (session.user as any).role = token.role;
         (session.user as any).firstName = token.firstName;
         (session.user as any).lastName = token.lastName;
         (session.user as any).wishlist = token.wishlist;

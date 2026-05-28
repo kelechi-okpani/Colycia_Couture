@@ -2,12 +2,12 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { IoSearchOutline, IoChevronDownOutline } from 'react-icons/io5';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import ProductCard from '../components/ui/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
-import { fetchProducts } from '../store/slices/productSlice';
-import { ProductNotFound, ProductSkeleton } from '../components/ui/Loading';
+import { AppDispatch, RootState } from '@/app/store/store';
+import { fetchProducts } from '@/app/store/slices/productSlice';
+import { ProductSkeleton } from '@/app/components/ui/Loading';
+import ProductCard from '@/app/components/ui/ProductCard';
+
 
 export default function ShopPage() {
   const [searchQuery, setSearchQuery] = useState("");

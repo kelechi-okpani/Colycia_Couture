@@ -1,8 +1,6 @@
 "use client";
-
 import Image from 'next/image';
 import Link from 'next/link';
-// import BG from "../../public/assets/BG.png"
 
 export default function AboutPage() {
   return (
@@ -46,6 +44,7 @@ export default function AboutPage() {
 
         <div className="absolute bottom-10 inset-x-0 z-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
           <Image 
+            // src="/brand/footer-watermark.png" 
             src="/brand/footer-watermark.png" 
             alt="Colycia Watermark"
             width={800}

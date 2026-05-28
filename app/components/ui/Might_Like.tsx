@@ -31,7 +31,7 @@ export default function MIght_Like() {
   if (status === 'loading') {
     return (
       <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-8xl mx-auto px-6 lg:px-10">
           <h2 className="text-3xl font-luxury font-medium tracking-widest text-center mb-16 uppercase">
           YOU MIGHT ALSO LIKE
           </h2>

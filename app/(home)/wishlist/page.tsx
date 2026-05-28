@@ -8,7 +8,7 @@ import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { toggleWishlistApi, fetchWishlist } from '@/app/store/slices/wishlistSlice';
 import { syncCartAction } from '@/app/store/slices/cartSlice'; // Use the sync action for DB consistency
 import { FiHeart } from 'react-icons/fi';
-import toast from 'react-hot-toast';
+
 
 export default function WishlistPage() {
   const dispatch = useAppDispatch();

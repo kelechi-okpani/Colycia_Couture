@@ -1,24 +1,21 @@
 "use client";
-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { 
-  IoHeartOutline, IoHeart, IoChevronBack, IoChevronForward, 
-  IoAdd, IoRemove, IoArrowBack, IoBagHandleOutline,
+   IoHeart, IoChevronBack, IoChevronForward, 
+  IoArrowBack,
   IoRemoveOutline,
   IoAddOutline
 } from 'react-icons/io5';
-import ProductCard from '@/app/components/ui/ProductCard';
 import { useRouter, useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { syncCartAction } from '@/app/store/slices/cartSlice'; 
 
 import { fetchProductById, clearCurrentProduct } from '@/app/store/slices/productSlice';
-import { toggleWishlistApi } from '@/app/store/slices/wishlistSlice';
 import toast from 'react-hot-toast';
-import { ProductNotFound, ProductSkeleton } from '@/app/components/ui/Loading';
 import SizeGuideModal from '@/app/components/ui/SizeGuide';
 import MIght_Like from '@/app/components/ui/Might_Like';
+
 
 export default function ProductDetail() {
   const params = useParams();
@@ -31,28 +28,23 @@ export default function ProductDetail() {
   const { currentProduct: product, status, error, loading } = useAppSelector((state) => state.products) as any;
   const { user } = useAppSelector((state) => state.auth);
   const { loading: cartLoading } = useAppSelector((state) => state.cart);
-
   const [selectedSize, setSelectedSize] = useState('L');
   const [quantity, setQuantity] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
 
-  console.log(product, "product..")
   // 2. Fetch from DB via Redux on mount
   useEffect(() => {
     if (params.id) {
       dispatch(fetchProductById(params?.id as string));
     }
-    // Cleanup: clear product when leaving page to avoid "flash" of old data next time
     return () => { dispatch(clearCurrentProduct()); };
   }, [params.id, dispatch]);
 
   // Update selected size once product loads
-  useEffect(() => {
-    if (product?.sizes?.length) setSelectedSize(product.sizes[0]);
-  }, [product]);
+    useEffect(() => {
+      if (product?.sizes?.length) setSelectedSize(product.sizes[0]);
+    }, [product]);
 
-
-  console.log(product, "product...")
   
   const isWishlisted = useAppSelector((state) =>
     state.wishlist.items.some((item) => item._id === product?._id)
@@ -61,8 +53,8 @@ export default function ProductDetail() {
   // --- ACTIONS ---
 
   const handleAddToCart = async (e: React.MouseEvent) => {
-  e.preventDefault();
-  e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
   // 1. Validation: Ensure user is logged in
   if (!user?._id) {
@@ -75,38 +67,37 @@ export default function ProductDetail() {
   // 2. Validation: Ensure product exists and a size is picked
   if (!product?._id) return;
 
-  if (!selectedSize) {
-    toast.error("Please select a size", {
-      style: { borderRadius: '0px', background: '#000', color: '#fff', fontSize: '12px' }
-    });
-    return;
-  }
+    if (!selectedSize) {
+      toast.error("Please select a size", {
+        style: { borderRadius: '0px', background: '#000', color: '#fff', fontSize: '12px' }
+      });
+      return;
+    }
 
-  try {
-    // 3. Sync with MongoDB API via Redux
-    await dispatch(syncCartAction({
-      userId: user._id,
-      productId: product._id,
-      quantity: 1,
-      size: selectedSize,
-      action: 'add'
-    })).unwrap();
-    
-    // FIX: Changed 'name' to 'product.name'
-    toast.success(`${product.name} (${selectedSize}) added to bag`, {
-      icon: '👜',
-      style: { borderRadius: '0px', background: '#fff', color: '#000', border: '1px solid #000' }
-    });
-    
-  } catch (error: any) {
-    toast.error(error || "Failed to update bag");
-  }
-    };
+      try {
+        // 3. Sync with MongoDB API via Redux
+        await dispatch(syncCartAction({
+          userId: user._id,
+          productId: product._id,
+          quantity: 1,
+          size: selectedSize,
+          action: 'add'
+        })).unwrap();
+        
+        // FIX: Changed 'name' to 'product.name'
+        toast.success(`${product.name} (${selectedSize}) added to bag`, {
+          icon: '👜',
+          style: { borderRadius: '0px', background: '#fff', color: '#000', border: '1px solid #000' }
+        });
+        
+      } catch (error: any) {
+        toast.error(error || "Failed to update bag");
+      }
+   };
 
 
 
     const handleBuyNow = async () => {
-    // const success = await handleAddToCart(false);
         router.push('/cart');
       };
 
@@ -117,10 +108,9 @@ export default function ProductDetail() {
           toast.error("Login to save to wishlist");
           return;
         }
-        // dispatch(toggleWishlistApi({ userId: user._id, productId: _id }));
       };
 
-        const handleUpdateQuantity = (productId: string, size: string, newQuantity: number) => {
+     const handleUpdateQuantity = (productId: string, size: string, newQuantity: number) => {
             if (newQuantity < 1) return; // Prevent 0 or negative quantities
             
             dispatch(syncCartAction({
@@ -130,30 +120,24 @@ export default function ProductDetail() {
               quantity: newQuantity,
               action: 'update'
             })) ;
-          };
+      };
 
 
-  // --- RENDER LOGIC ---
-
-
-  // if (status === 'failed' || !product) return (
-  //   <ProductNotFound error={error}/>
-  // );
-const images = product?.gallery?.length ? product.gallery : [product?.image];
+    const images = product?.gallery?.length ? product.gallery : [product?.image];
 
 
   return (
-    <div className="bg-white min-h-screen pt-20 text-neutral-900">
-        <main className="max-w-7xl mx-auto px-4 py-6 md:py-12">
+    <div className="bg-white min-h-screen  text-neutral-900 ">
+        <main className="max-w-7xl mx-auto px-2 py-6 md:py-12">
           {/* Breadcrumb / Back */}
           <button 
             onClick={() => router.back()} 
-            className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] mb-8 hover:opacity-60 transition-opacity"
+            className="flex items-center cursor-pointer gap-2 text-[11px] font-medium uppercase tracking-[0.1em] mb-8 hover:opacity-60 transition-opacity"
           > 
             <IoArrowBack /> Back to Shop
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16  p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             
             {/* GALLERY SECTION */}
             <div className="lg:col-span-7 flex flex-col md:flex-row gap-4">
@@ -169,7 +153,7 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
                   >
                     <Image 
                     src={product?.image} 
-                alt="thumb" fill className="object-cover" sizes="80px" />  
+                   alt="thumb" fill className="object-cover" sizes="80px" />  
                     {/* <Image src={img} alt="thumb" fill className="object-cover" sizes="80px" /> */}
                   </button>
                 ))}
@@ -191,13 +175,13 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
                   <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between">
                     <button 
                       onClick={() => setActiveImg(prev => (prev === 0 ? images.length - 1 : prev - 1))}
-                      className="bg-white p-2 rounded-full shadow-md hover:bg-black hover:text-white transition-colors"
+                      className="cursor-pointer bg-white p-2 rounded-full shadow-md hover:bg-black hover:text-white transition-colors"
                     >
                       <IoChevronBack size={20} />
                     </button>
                     <button 
                       onClick={() => setActiveImg(prev => (prev === images.length - 1 ? 0 : prev + 1))}
-                      className="bg-white p-2 rounded-full shadow-md hover:bg-black hover:text-white transition-colors"
+                      className="cursor-pointer bg-white p-2 rounded-full shadow-md hover:bg-black hover:text-white transition-colors"
                     >
                       <IoChevronForward size={20} />
                     </button>
@@ -238,7 +222,7 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
                     <button 
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`w-12 h-10 text-[13px] border transition-all ${
+                      className={`cursor-pointer w-12 h-10 text-[13px] border transition-all ${
                         selectedSize === size ? 'bg-black text-white border-black' : 'border-neutral-200 hover:border-black'
                       }`}
                     >
@@ -255,7 +239,7 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
                             <div className="flex items-center border border-neutral-200">
                               <button 
                                 onClick={() => handleUpdateQuantity(product?._id, product?.size, product?.quantity - 1)}
-                                className="p-3 hover:bg-neutral-50 disabled:opacity-30"
+                                className="cursor-pointer p-3 hover:bg-neutral-50 disabled:opacity-30"
                                 disabled={loading || product?.quantity <= 1}
                               >
                                 <IoRemoveOutline size={14} />
@@ -263,7 +247,7 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
                               <span className="px-6 font-medium text-sm">{product?.quantity}</span>
                               <button 
                                 onClick={() => handleUpdateQuantity(product?._id, product?.size, product?.quantity + 1)}
-                                className="p-3 hover:bg-neutral-50"
+                                className="cursor-pointer p-3 hover:bg-neutral-50"
                                 disabled={loading}
                               >
                                 <IoAddOutline size={14} />
@@ -273,11 +257,11 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
 
                           
                 <div className="flex items-center border border-neutral-200 h-12 px-4 gap-6">
-                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="hover:opacity-50">
+                  <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="cursor-pointer hover:opacity-50">
                     <IoChevronBack size={14} />
                   </button>
                   <span className="text-sm font-medium w-4 text-center">{quantity}</span>
-                  <button onClick={() => setQuantity(q => q + 1)} className="hover:opacity-50">
+                  <button onClick={() => setQuantity(q => q + 1)} className="cursor-pointer hover:opacity-50">
                     <IoChevronForward size={14} />
                   </button>
                 </div>
@@ -293,13 +277,13 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
               <div className="space-y-3">
                 <button 
                   onClick={handleAddToCart}
-                  className="w-full h-14 bg-black text-white text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all active:scale-[0.98]"
+                  className="cursor-pointer w-full h-14 bg-black text-white text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all active:scale-[0.98]"
                 >
                   Add To Cart
                 </button>
                 <button 
                   onClick={handleBuyNow}
-                  className="w-full h-14 bg-[#F2F2F2] text-black text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all active:scale-[0.98]"
+                  className="cursor-pointer w-full h-14 bg-[#F2F2F2] text-black text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all active:scale-[0.98]"
                 >
                   Buy Now
                 </button>
@@ -310,9 +294,13 @@ const images = product?.gallery?.length ? product.gallery : [product?.image];
               </p>
             </div>
           </div>
+        
         </main>
-
+  <div className="max-w-7xl mx-auto p-4 mb-6 border border-gray-200 rounded-lg bg-white shadow-sm">
     <MIght_Like/>
+  </div>
+    
+    
       <SizeGuideModal 
         isOpen={isSizeGuideOpen} 
         onClose={() => setIsSizeGuideOpen(false)} 

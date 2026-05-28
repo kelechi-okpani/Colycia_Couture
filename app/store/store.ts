@@ -6,6 +6,7 @@ import cartReducer from './slices/cartSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import productReducer from './slices/productSlice';
 import orderReducer from './slices/orderSlice';
+import referralReducer from './slices/referralSlice';
 
 
 export const makeStore = () => {
@@ -17,6 +18,7 @@ export const makeStore = () => {
       wishlist: wishlistReducer,
       products: productReducer,
       order: orderReducer,
+      referrals: referralReducer,
     },
     // Adding middleware is optional, but useful for serializable checks
     middleware: (getDefaultMiddleware) =>

@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 import { IoChevronDownOutline, IoShieldCheckmarkOutline, IoArrowBackOutline, IoLocationOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
-import { RootState } from '../store/store';
-import PaymentHandler from '../components/ui/PaymentHandler';
+import { RootState } from '../../store/store';
+import PaymentHandler from '../../components/ui/PaymentHandler';
 import { FaTruckFast } from "react-icons/fa6"
 import {  IoGlobeOutline } from "react-icons/io5"
-import { countryData } from '../data/data';
+import { countryData } from '../../data/data';
 
 
 

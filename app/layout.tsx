@@ -22,13 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans" suppressHydrationWarning>
-              <Providers>
-                <Toaster position="bottom-right" reverseOrder={false} />
-        <Navbar />
-        <main className="pt-20 min-h-screen">
+       <Providers>
+       <Toaster position="bottom-right" reverseOrder={false} />
+        {/* <Navbar /> */}
+        <main className="min-h-screen">
              {children}
         </main>
-        <Footer />
+        {/* <Footer /> */}
         </Providers>
 
       </body>

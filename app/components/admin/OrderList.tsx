@@ -90,7 +90,7 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
             <button
               key={s}
               onClick={() => setFilter(s)}
-              className={`px-6 py-2 text-[10px] uppercase tracking-widest transition-all ${
+              className={`cursor-pointer px-6 py-2 text-[10px] uppercase tracking-widest transition-all ${
                 filter === s ? 'bg-white text-black shadow-sm font-bold' : 'text-neutral-400 hover:text-black'
               }`}
             >
@@ -153,14 +153,14 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
                     <>
                       <button 
                         onClick={() => handleStatusUpdate(order._id, 'shipped')}
-                        className="p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+                        className="cursor-pointer p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors"
                         title="Mark as Shipped"
                       >
                         <IoCheckmarkCircleOutline size={22} />
                       </button>
                       <button 
                         onClick={() => handleStatusUpdate(order._id, 'cancelled')}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
                         title="Cancel Order"
                       >
                         <IoCloseCircleOutline size={22} />
@@ -169,7 +169,7 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
                   )}
                   <button 
                   onClick={() => setSelectedOrder(order)}
-                  className="p-2 text-neutral-400 hover:text-black transition-colors">
+                  className="cursor-pointer p-2 text-neutral-400 hover:text-black transition-colors">
                     <IoEyeOutline size={20} />
                   </button>
                 </td>

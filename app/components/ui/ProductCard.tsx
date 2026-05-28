@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,7 +30,6 @@ export default function ProductCard({ _id, name, price, imageUrl, category, curr
   );
 
 
-  console.log(user, "user...")
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
