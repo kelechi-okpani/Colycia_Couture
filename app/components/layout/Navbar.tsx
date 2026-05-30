@@ -12,9 +12,10 @@ import { fetchCart } from '@/app/store/slices/cartSlice';
 
 const navLinks = [
   { name: 'HOME', href: '/' },
+  { name: 'COLLECTION', href: '/shop' },
   { name: 'ABOUT US', href: '/about' },
-  { name: 'SHOP', href: '/shop' },
   { name: 'CONTACT US', href: '/contact' },
+  // { name: 'ADMIN', href: '/admin' },
 ];
 
 export default function Navbar() {
@@ -27,7 +28,7 @@ export default function Navbar() {
   const cartItems = useAppSelector((state:any) => state.cart.items);
   const wishlistItems = useAppSelector((state:any) => state.wishlist.items);
 
-// console.log(user, "nav user...")
+console.log(user, "nav user...")
 
   // 2. Fetch User Data from DB on mount
   useEffect(() => {

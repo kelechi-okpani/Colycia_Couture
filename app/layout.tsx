@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import { Providers } from './store/Providers';
 import { Toaster } from 'react-hot-toast';
+import ReferralTracker from './components/admin/REF/ReferralTracker';
 
 // Load luxury font
 
@@ -22,13 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans" suppressHydrationWarning>
-              <Providers>
-                <Toaster position="bottom-right" reverseOrder={false} />
-        <Navbar />
-        <main className="pt-20 min-h-screen">
+       <Providers>
+       <Toaster position="bottom-right" reverseOrder={false} />
+        {/* <Navbar /> */}
+        <main className="min-h-screen">
+              <ReferralTracker />
              {children}
         </main>
-        <Footer />
+        {/* <Footer /> */}
         </Providers>
 
       </body>

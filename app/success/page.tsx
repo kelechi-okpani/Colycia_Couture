@@ -8,59 +8,172 @@ import { motion } from "framer-motion";
 import { IoCheckmarkCircle, IoBagHandleOutline, IoArrowForward } from "react-icons/io5";
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { syncCartAction, fetchCart } from '@/app/store/slices/cartSlice';
+import { getReferralData } from "../components/admin/REF/ReferralHelper";
+import { ReferralEvent } from "../lib/models/referral";
 
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
+
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
    const { user } = useAppSelector((state) => state.auth);
 
 
 
-useEffect(() => {
-  const confirmOrder = async () => {
-    if (!sessionId) {
-      router.push("/");
-      return;
-    }
+// useEffect(() => {
+//   const confirmOrder = async () => {
+//     if (!sessionId) {
+//       router.push("/");
+//       return;
+//     }
 
-    try {
-      // 1. Verify payment and update order status in DB
-      const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
-      const data = await response.json();
+//     try {
+//       // 1. Verify payment and update order status in DB
+//       const response = await fetch(`/api/orders/confirm?session_id=${sessionId}`);
+//       const data = await response.json();
 
-      if (data.success) {
-        // 2. Clear Redux State
-        dispatch(resetCartState());
-        dispatch(syncCartAction({ userId: user?._id, action: 'clear' })).unwrap();
-        
+//       if (data.success) {
+//         // 2. Clear Redux State
+//         dispatch(resetCartState());
+//         dispatch(syncCartAction({ userId: user?._id, action: 'clear' })).unwrap();
+//         // 3. Clear LocalStorage (In case your Redux persist doesn't catch it)
+//         if (typeof window !== "undefined") {
+//           localStorage.removeItem("cart"); // Or whatever key you use
+//         }
 
-        // 3. Clear LocalStorage (In case your Redux persist doesn't catch it)
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("cart"); // Or whatever key you use
+
+
+       
+//         // 4. Clear Database Cart (If the user is logged in)
+//         // We do this via a background fetch so it doesn't block the UI
+//         await fetch('/api/cart/clear', { method: 'DELETE' });
+//         setLoading(false);
+//       } else {
+//         console.error("Payment confirmation failed");
+//         setLoading(false);
+//         // Optional: router.push("/checkout?error=payment_failed");
+//       }
+//     } catch (err) {
+//       console.error("Error confirming order:", err);
+//       setLoading(false);
+//     }
+//   };
+
+//   confirmOrder();
+// }, [sessionId, dispatch, router]);
+
+
+
+  useEffect(() => {
+    const confirmOrder = async () => {
+      if (!sessionId) {
+        router.push("/");
+        return;
+      }
+
+      try {
+        // -----------------------------
+        // 1. Confirm order on backend
+        // -----------------------------
+        const res = await fetch(
+          `/api/orders/confirm?session_id=${sessionId}`
+        );
+
+        const data = await res.json();
+
+        if (!data.success) {
+          console.error(
+            "Payment verification failed"
+          );
+          setLoading(false);
+          return;
         }
 
-        // 4. Clear Database Cart (If the user is logged in)
-        // We do this via a background fetch so it doesn't block the UI
-        await fetch('/api/cart/clear', { method: 'DELETE' });
+        const order = data.order;
+
+        // -----------------------------
+        // 2. Clear cart state
+        // -----------------------------
+        dispatch(resetCartState());
+
+        if (user?._id) {
+          await dispatch(
+            syncCartAction({
+              userId: user._id,
+              action: "clear",
+            })
+          ).unwrap();
+        }
+
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("cart");
+        }
+
+        // -----------------------------
+        // 3. Fire referral conversion
+        // (IMPORTANT FIX)
+        // -----------------------------
+        const partnerCode =
+          document.cookie
+            .split("; ")
+            .find((row) =>
+              row.startsWith("colycia_ref=")
+            )
+            ?.split("=")[1];
+
+        const visitorId =
+          document.cookie
+            .split("; ")
+            .find((row) =>
+              row.startsWith("colycia_vid=")
+            )
+            ?.split("=")[1];
+
+        if (partnerCode && visitorId) {
+          await fetch(
+            "/api/referrals/event",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+              body: JSON.stringify({
+                partnerCode,
+                visitorId,
+                eventType: "purchase",
+                revenue:
+                  order?.totalAmount || 0,
+                orderId: order?._id,
+              }),
+            }
+          );
+        }
+
+        // -----------------------------
+        // 4. Clear server cart
+        // -----------------------------
+        await fetch("/api/cart/clear", {
+          method: "DELETE",
+        });
 
         setLoading(false);
-      } else {
-        console.error("Payment confirmation failed");
+      } catch (err) {
+        console.error(
+          "Error confirming order:",
+          err
+        );
         setLoading(false);
-        // Optional: router.push("/checkout?error=payment_failed");
       }
-    } catch (err) {
-      console.error("Error confirming order:", err);
-      setLoading(false);
-    }
-  };
+    };
 
-  confirmOrder();
-}, [sessionId, dispatch, router]);
+    confirmOrder();
+  }, [sessionId]);
+
+
 
   if (loading) {
     return (

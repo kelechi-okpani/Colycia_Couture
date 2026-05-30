@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import dbConnect from '@/app/lib/mongodb';
 import Order from '@/app/lib/models/order';
+import { trackReferralEvent } from '@/app/lib/referrals/referralTracker';
 
 // app/api/checkout/route.ts
 
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
 
     // 2. Create Order in MongoDB with 'pending' status
     // This captures the intent to buy before the user even finishes on Stripe
-    await Order.create({
+    const order = await Order.create({
       userId: userId || null, // Allow for guest checkout if your schema supports it
       items: items.map((item: any) => ({
         productId: item.productId,
@@ -77,6 +78,16 @@ export async function POST(req: Request) {
       paymentStatus: 'pending',
       orderStatus: 'processing'
     });
+
+    await trackReferralEvent({
+        partnerCode: formData.partnerCode, // IMPORTANT: pass from frontend OR cookie
+        visitorId: formData.visitorId,     // IMPORTANT
+        eventType: "checkout",
+        orderId: order._id.toString(),
+        metadata: {
+          totalAmount,
+        },
+      });
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {

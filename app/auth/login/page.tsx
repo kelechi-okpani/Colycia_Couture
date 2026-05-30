@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { clearMessages, loginUser } from "@/app/store/slices/authSlice";
-// import { useAppDispatch, useAppSelector } from "@/store/hooks";
-// import { loginUser, clearMessages } from "@/store/slices/authSlice";
+
 
 
 
@@ -78,13 +77,17 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const result = await dispatch(loginUser(formData)).unwrap();
   
-    if (result) {
-      console.log("Login successful, redirecting...", result);
-      // Force the redirect and return immediately to stop execution
-      // window.location.assign("/profile"); 
-      router.push("/profile"); 
-      return; 
+    console.log("Login successful:", result);
+    // Check user role
+    if (result.role === "admin") {
+      // router.push("/admin");
+      router.replace("/admin");
+      return;
     }
+
+    // Default user redirect
+    router.replace("/profile");
+    // router.push("/profile");
   } catch (err) {
     console.error("Failed to login:", err);
   }
@@ -96,7 +99,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <div className="about-bg-watermark" aria-hidden="true" />
 
       <div className="w-full max-w-2xl bg-white rounded-xl shadow-sm border border-neutral-100 p-8 md:p-16 z-10">
-        <div className="text-center mb-10">
+        {/* <div className="text-center mb-10">
           <h1 className="text-2xl md:text-3xl font-medium text-neutral-900 mb-2">Log in</h1>
           <p className="text-sm text-neutral-500 font-light">
             Don’t have an account?{" "}
@@ -104,7 +107,36 @@ const handleSubmit = async (e: React.FormEvent) => {
               sign up
             </Link>
           </p>
-        </div>
+        </div> */}
+
+        <div className="text-center mb-10">
+    <h1 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-neutral-900 mb-2">Log in</h1>
+    <p className="text-xs text-neutral-400 uppercase tracking-wider">
+      Don’t have an account?{" "}
+      <Link href="/auth/register" className="text-neutral-900 underline underline-offset-4 hover:text-neutral-600 transition-colors font-bold">
+        sign up
+      </Link>
+    </p>
+
+    {/* --- CONTINUE SHOPPING ACCENT BUTTON --- */}
+    <div className="mt-6 pt-5 border-t border-neutral-100 flex justify-center">
+      <Link 
+        href="/shop" 
+        className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-neutral-400 hover:text-neutral-900 transition-colors duration-200"
+      >
+        <svg 
+          className="w-3.5 h-3.5 transform group-hover:-translate-x-1 transition-transform duration-200" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="1.5" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Continue Shopping
+      </Link>
+    </div>
+  </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           {error && (

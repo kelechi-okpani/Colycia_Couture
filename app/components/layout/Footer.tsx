@@ -1,7 +1,6 @@
 "use client";
-
 import Link from 'next/link';
-// import { Facebook, Instagram, Twitter, MessageSquare } from 'lucide-react'; // Swapped for correct brand icons
+
 
 const footerSections = [
   {

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import dbConnect from '@/app/lib/mongodb';
 import Order from '@/app/lib/models/order';
+import { trackReferralEvent } from '@/app/lib/referrals/referralTracker';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -28,6 +29,15 @@ export async function GET(req: Request) {
         },
         { new: true }
       );
+
+
+    await trackReferralEvent({
+        partnerCode: session.metadata?.partnerCode,
+        visitorId: session.metadata?.visitorId,
+        eventType: "purchase",
+        orderId: updatedOrder?._id,
+        revenue: updatedOrder.amount / 100,
+      });
 
       return NextResponse.json({ success: true, order: updatedOrder });
     }
