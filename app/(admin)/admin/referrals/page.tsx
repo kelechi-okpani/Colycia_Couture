@@ -3,7 +3,7 @@
 import { useAppDispatch } from '@/app/store/store';
 import { fetchReferralStats } from '@/app/store/slices/referralSlice';
 import CreateReferralLink from '@/app/components/admin/REF/CreateReferralLink';
-import { ReferralDashboardContent, ReferralDashboardSkeleton } from '@/app/components/admin/Referral';
+import { ReferralDashboardContent } from '@/app/components/admin/Referral';
 import { Suspense } from 'react';
 
 
@@ -30,18 +30,10 @@ export default function ReferralAdminPage() {
         <ReferralDashboard />
       </div> */}
 
-          <Suspense fallback={<ReferralDashboardSkeleton />}>
+          <Suspense fallback={<div>Loading...... </div>}>
               <ReferralDashboardContent />
         </Suspense>
     </main>
   );
 }
 
-// // --- 3. MAIN EXPORT WRAPPED IN SUSPENSE ---
-// export default function ReferralDashboard() {
-//   return (
-//     <Suspense fallback={<ReferralDashboardSkeleton />}>
-//       <ReferralDashboardContent />
-//     </Suspense>
-//   );
-// }

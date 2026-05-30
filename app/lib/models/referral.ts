@@ -1,35 +1,130 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
+/* -----------------------------
+   PARTNER SCHEMA
+------------------------------ */
+const PartnerSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-const PartnerSchema = new mongoose.Schema({
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User',
-    required: false // Optional: Only if partners have standard user accounts
+    code: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      index: true,
+    },
+
+    commissionRate: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+
+    active: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
   },
-  code: { 
-    type: String, 
-    required: [true, "Referral code is required"], 
-    unique: true, 
-    lowercase: true,
-    trim: true 
-  }, // e.g., "partnername"
-  name: { type: String, required: true },
-  commissionRate: { type: Number, default: 0 }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-// The Event Schema (Logs every click, form submission, and purchase)
-const ReferralEventSchema = new mongoose.Schema({
-  partnerCode: { type: String, required: true, index: true },
-  eventType: { 
-    type: String, 
-    enum: ['visit', 'inquiry', 'booking'], 
-    required: true 
+/* -----------------------------
+   REFERRAL EVENT SCHEMA
+------------------------------ */
+const ReferralEventSchema = new mongoose.Schema(
+  {
+    partnerCode: {
+      type: String,
+      required: true,
+      index: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    visitorId: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
+    eventType: {
+      type: String,
+      enum: [
+        "visit",
+        "product_view",
+        "add_to_cart",
+        "checkout",
+        "purchase",
+      ],
+      required: true,
+      index: true,
+    },
+
+    revenue: {
+      type: Number,
+      default: 0,
+    },
+
+    orderId: {
+      type: String,
+      index: true,
+      sparse: true,
+    },
+
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
   },
-  revenue: { type: Number, default: 0 }, // 0 for visits/inquiries, total amount for bookings
-  referenceId: { type: String }, // e.g., the Booking ID or Inquiry ID for cross-referencing
-  ipAddress: { type: String } // Useful for filtering out duplicate clicks
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-export const Partner = mongoose.models.Partner || mongoose.model('Partner', PartnerSchema);
-export const ReferralEvent = mongoose.models.ReferralEvent || mongoose.model('ReferralEvent', ReferralEventSchema);
+/* -----------------------------
+   🔥 IMPORTANT INDEXES
+------------------------------ */
+
+// Prevent duplicate PURCHASE per order
+ReferralEventSchema.index(
+  { orderId: 1, eventType: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      eventType: "purchase",
+    },
+  }
+);
+
+// Prevent spam visits (same visitor same partner same day)
+ReferralEventSchema.index(
+  { partnerCode: 1, visitorId: 1, eventType: 1, createdAt: 1 }
+);
+
+// Analytics optimization
+ReferralEventSchema.index({
+  partnerCode: 1,
+  eventType: 1,
+  createdAt: -1,
+});
+
+/* -----------------------------
+   EXPORT MODELS
+------------------------------ */
+
+export const Partner =
+  mongoose.models.Partner ||
+  mongoose.model("Partner", PartnerSchema);
+
+export const ReferralEvent =
+  mongoose.models.ReferralEvent ||
+  mongoose.model(
+    "ReferralEvent",
+    ReferralEventSchema
+  );

@@ -7,6 +7,7 @@ import { IoCheckmarkCircleOutline, IoTimeOutline, IoCloseCircleOutline, IoEyeOut
 import Image from 'next/image';
 import OrderDetailModal from './OrderDetailModal';
 import toast from 'react-hot-toast'; 
+import Pagination from '../ui/Pagination';
 
 
 export default function OrderList() {
@@ -18,6 +19,9 @@ export default function OrderList() {
   const user = useAppSelector((state) => state.auth.user);
 
   const [filter, setFilter] = useState('processing'); // processing, shipped, delivered, cancelled
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
   // 2. Fetch orders using Redux thunk on mount
   useEffect(() => {
@@ -72,7 +76,19 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
 };
 
   // Filter logic based on orderStatus field in your Redux interface
-  const filteredOrders = orders.filter(order => order.orderStatus === filter);
+  // const filteredOrders = orders.filter(order => order.orderStatus === filter);
+  const filtered = orders.filter(
+  (order) => order.orderStatus === filter
+);
+  const totalPages = Math.ceil(filtered.length / limit);
+  const paginatedOrders = filtered.slice(
+    (page - 1) * limit,
+    page * limit
+  );
+
+  useEffect(() => {
+  setPage(1);
+}, [filter]);
 
   const isLoading = status === 'loading';
 
@@ -118,7 +134,8 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
             </tr>
           </thead>
           <tbody className={`divide-y divide-neutral-50 ${isLoading ? 'opacity-50' : ''}`}>
-            {filteredOrders.map((order: any) => (
+            {paginatedOrders.map((order: any) => (
+            // {filteredOrders.map((order: any) => (
               <tr key={order._id} className="hover:bg-neutral-50/50 transition-colors group">
                 <td className="px-6 py-5">
                   <div className="flex flex-col">
@@ -176,9 +193,16 @@ const handleStatusUpdate = async (orderId: string, newStatus: string) => {
               </tr>
             ))}
           </tbody>
-        </table>
+
         
-        {(filteredOrders.length === 0 && !isLoading) && (
+        </table>
+          <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+        
+        {(paginatedOrders.length === 0 && !isLoading) && (
           <div className="py-20 text-center space-y-3">
              <IoTimeOutline size={40} className="mx-auto text-neutral-200" />
              <p className="text-neutral-400 text-sm italic">No orders found in this category.</p>

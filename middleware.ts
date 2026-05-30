@@ -11,7 +11,6 @@ export async function middleware(request: NextRequest) {
     secureCookie: process.env.NODE_ENV === 'production',
   });
 
-  console.log(token, "token.....")
   /**
    * Protected Routes
    */
@@ -83,75 +82,3 @@ export const config = {
     '/auth/login',
   ],
 };
-
-
-// import { NextResponse } from "next/server";
-// import type { NextRequest } from "next/server";
-// import { getToken } from "next-auth/jwt";
-
-// export async function middleware(request: NextRequest) {
-//   const { pathname } = request.nextUrl;
-
-//   const token = await getToken({
-//     req: request,
-//     secret: process.env.NEXTAUTH_SECRET,
-//   });
-
-//   // PUBLIC API ROUTES
-//   if (pathname.startsWith("/api")) {
-//     const publicApiEndpoints = [
-//       "/api/shop",
-//       "/api/auth",
-//       "/api/signup",
-//       "/api/login",
-//       "/api/forgot-password",
-//       "/api/reset-password",
-//       "/api/cart",
-//     ];
-
-//     const isPublicApi = publicApiEndpoints.some((api) =>
-//       pathname.startsWith(api)
-//     );
-
-//     if (!isPublicApi && !token) {
-//       return NextResponse.json(
-//         { error: "Authentication required" },
-//         { status: 401 }
-//       );
-//     }
-//   }
-
-//   // PROTECTED PAGES
-//   const protectedRoutes = ["/checkout", "/profile", "/orders", "/admin"];
-  
-
-  
-//   const isProtectedRoute = protectedRoutes.some((route) =>
-//     pathname.startsWith(route)
-//   );
-
-//   if (isProtectedRoute && !token) {
-//     const loginUrl = new URL("/auth/login", request.url);
-
-//     loginUrl.searchParams.set("callbackUrl", pathname);
-
-//     return NextResponse.redirect(loginUrl);
-//   }
-
-//   // ALREADY LOGGED IN → BLOCK LOGIN PAGE
-//   if (pathname === "/auth/login" && token) {
-//     return NextResponse.redirect(new URL("/profile", request.url));
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: [
-//     "/api/:path*",
-//     "/checkout/:path*",
-//     "/profile/:path*",
-//     "/orders/:path*",
-//     "/auth/login",
-//   ],
-// };

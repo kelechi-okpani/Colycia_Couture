@@ -12,10 +12,10 @@ import { fetchCart } from '@/app/store/slices/cartSlice';
 
 const navLinks = [
   { name: 'HOME', href: '/' },
+  { name: 'COLLECTION', href: '/shop' },
   { name: 'ABOUT US', href: '/about' },
-  { name: 'SHOP', href: '/shop' },
   { name: 'CONTACT US', href: '/contact' },
-  { name: 'ADMIN', href: '/admin' },
+  // { name: 'ADMIN', href: '/admin' },
 ];
 
 export default function Navbar() {

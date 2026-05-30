@@ -27,6 +27,8 @@ declare module 'lucide-react' {
   export const Package: LucideIcon;
   export const Settings: LucideIcon;
   export const LogOut: LucideIcon;
+  export const SlidersHorizontal: LucideIcon;
+  export const Percent: LucideIcon;
 
 
 

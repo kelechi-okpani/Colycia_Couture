@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { clearMessages, loginUser } from "@/app/store/slices/authSlice";
-// import { useAppDispatch, useAppSelector } from "@/store/hooks";
-// import { loginUser, clearMessages } from "@/store/slices/authSlice";
+
 
 
 
@@ -81,12 +80,14 @@ const handleSubmit = async (e: React.FormEvent) => {
     console.log("Login successful:", result);
     // Check user role
     if (result.role === "admin") {
-      router.push("/admin");
+      // router.push("/admin");
+      router.replace("/admin");
       return;
     }
 
     // Default user redirect
-    router.push("/profile");
+    router.replace("/profile");
+    // router.push("/profile");
   } catch (err) {
     console.error("Failed to login:", err);
   }

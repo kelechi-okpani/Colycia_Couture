@@ -7,16 +7,41 @@ import { AppDispatch, RootState } from '@/app/store/store';
 import { fetchProducts } from '@/app/store/slices/productSlice';
 import { ProductSkeleton } from '@/app/components/ui/Loading';
 import ProductCard from '@/app/components/ui/ProductCard';
+import { trackReferralEvent } from '@/app/lib/referrals/referralTracker';
 
 
 export default function ShopPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState("New Arrivals");
-
   const dispatch = useDispatch<AppDispatch>();
   const { items, status, error } = useSelector((state: RootState) => state.products);
   
+  
+// const partnerCode = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get("ref") || "" : "";
+const partnerCode = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get("ref") || localStorage.getItem("visitorId")  : "";
+const visitorId = typeof window !== 'undefined' ? localStorage.getItem("visitorId") || "" : "";
+
+console.log(partnerCode, "CODE")
+console.log(visitorId, "CODE-V")
+
+  useEffect(() => {
+    let visitorId = localStorage.getItem("visitorId");
+
+    if (!visitorId) {
+      visitorId = crypto.randomUUID();
+      localStorage.setItem("visitorId", visitorId);
+    }
+
+    if (!partnerCode) return;
+
+    trackReferralEvent({
+      partnerCode,
+      eventType: "product_view",
+    });
+  }, []);
+
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts());

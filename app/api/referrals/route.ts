@@ -1,109 +1,128 @@
-// app/api/referrals/event/route.ts
-import dbConnect from '@/app/lib/mongodb';
-import { ReferralEvent, Partner } from '@/app/lib/models/referral'; // <-- Added Partner model
-import { NextResponse } from 'next/server';
+import dbConnect from "@/app/lib/mongodb";
+import { Partner, ReferralEvent } from "@/app/lib/models/referral";
+import { NextResponse } from "next/server";
+
+const ALLOWED_EVENTS = [
+  "visit",
+  "product_view",
+  "add_to_cart",
+  "checkout",
+  "purchase",
+] as const;
+
+type EventType = (typeof ALLOWED_EVENTS)[number];
 
 export async function POST(req: Request) {
   try {
     await dbConnect();
+
     const body = await req.json();
-    
-    // Convert to lowercase immediately so "Vogue" and "vogue" are treated the same
-    const partnerCode = body.partnerCode?.toLowerCase(); 
-    const { eventType, revenue, referenceId } = body;
 
-    if (!partnerCode || !eventType) {
-      return NextResponse.json({ error: "Missing required tracking fields" }, { status: 400 });
+    const partnerCode = String(body.partnerCode || "").toLowerCase().trim();
+    const visitorId = String(body.visitorId || "").trim();
+    const eventType = String(body.eventType || "").trim() as EventType;
+
+    const revenue = Number(body.revenue || 0);
+    const orderId = body.orderId ? String(body.orderId).trim() : undefined;
+    const metadata = body.metadata ?? {};
+
+    // ---------------- VALIDATION ----------------
+    if (!partnerCode || !visitorId || !eventType) {
+      return NextResponse.json(
+        { error: "partnerCode, visitorId and eventType are required" },
+        { status: 400 }
+      );
     }
 
-    // 1. VALIDATION: Check if this partner actually exists in the database
-    const partnerExists = await Partner.findOne({ code: partnerCode });
-    if (!partnerExists) {
-      return NextResponse.json({ error: "Invalid partner code" }, { status: 404 });
+    if (!ALLOWED_EVENTS.includes(eventType)) {
+      return NextResponse.json({ error: "Invalid event type" }, { status: 400 });
     }
 
-    // Capture IP address for basic de-duplication (Next.js specific)
-    const ipAddress = req.headers.get('x-forwarded-for') || 'unknown';
+    // ---------------- CHECK PARTNER ----------------
+    const partner = await Partner.findOne({
+      code: partnerCode,
+      active: true,
+    });
 
-    // 2. ANTI-SPAM: If it's a 'visit', check if this IP already visited today
-    if (eventType === 'visit') {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      const existingVisit = await ReferralEvent.findOne({
+    if (!partner) {
+      return NextResponse.json(
+        { error: "Partner not found" },
+        { status: 404 }
+      );
+    }
+
+    // ---------------- VISIT DEDUP (DAILY ONLY) ----------------
+    if (eventType === "visit") {
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const exists = await ReferralEvent.findOne({
         partnerCode,
-        eventType: 'visit',
-        ipAddress,
-        createdAt: { $gte: today }
+        visitorId,
+        eventType: "visit",
+        createdAt: { $gte: startOfDay },
       });
 
-      if (existingVisit) {
-        // Return 200 so the frontend fetch doesn't throw an error, 
-        // but we safely skip writing a duplicate to the DB.
-        return NextResponse.json({ message: "Visit already counted today", skipped: true });
+      if (exists) {
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          message: "Visit already tracked today",
+        });
       }
     }
 
-    // 3. LOGGING: Record the verified event
-    const newEvent = await ReferralEvent.create({
+    if (eventType === "product_view") {
+      const exists = await ReferralEvent.findOne({
+        partnerCode,
+        visitorId,
+        eventType: "product_view",
+        "metadata.productId": metadata?.productId,
+      });
+
+      if (exists) return;
+    }
+    
+
+    // ---------------- ORDER DEDUP ----------------
+    if (["checkout", "purchase"].includes(eventType) && orderId) {
+      const exists = await ReferralEvent.findOne({
+        eventType,
+        orderId,
+      });
+
+      if (exists) {
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          message: `${eventType} already recorded`,
+        });
+      }
+    }
+
+    // ---------------- CREATE EVENT ----------------
+    const event = await ReferralEvent.create({
       partnerCode,
+      visitorId,
       eventType,
-      revenue: revenue || 0,
-      referenceId: referenceId || null,
-      ipAddress
+      revenue,
+      orderId,
+      metadata,
     });
 
-    return NextResponse.json({ success: true, eventId: newEvent._id });
+    return NextResponse.json(
+      {
+        success: true,
+        event,
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Referral Event Error:", error);
+
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
-
-// import dbConnect from '@/app/lib/mongodb';
-// import { ReferralEvent } from '@/app/lib/models/referral';
-// import { NextResponse } from 'next/server';
-
-
-// export async function POST(req: Request) {
-//   try {
-//     await dbConnect();
-//     const body = await req.json();
-//     const { partnerCode, eventType, revenue, referenceId } = body;
-
-//     if (!partnerCode || !eventType) {
-//       return NextResponse.json({ error: "Missing required tracking fields" }, { status: 400 });
-//     }
-
-//     // Capture IP address for basic de-duplication (Next.js specific)
-//     const ipAddress = req.headers.get('x-forwarded-for') || 'unknown';
-
-//     // Optional: If it's a 'visit', check if this IP already visited today to prevent spam
-//     if (eventType === 'visit') {
-//       const today = new Date();
-//       today.setHours(0, 0, 0, 0);
-      
-//       const existingVisit = await ReferralEvent.findOne({
-//         partnerCode,
-//         eventType: 'visit',
-//         ipAddress,
-//         createdAt: { $gte: today }
-//       });
-
-//       if (existingVisit) {
-//         return NextResponse.json({ message: "Visit already counted today" });
-//       }
-//     }
-
-//     const newEvent = await ReferralEvent.create({
-//       partnerCode,
-//       eventType,
-//       revenue: revenue || 0,
-//       referenceId: referenceId || null,
-//       ipAddress
-//     });
-
-//     return NextResponse.json({ success: true, eventId: newEvent._id });
-//   } catch (error: any) {
-//     return NextResponse.json({ error: error.message }, { status: 500 });
-//   }
-// }
