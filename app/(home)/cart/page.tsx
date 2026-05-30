@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { syncCartAction, fetchCart } from '@/app/store/slices/cartSlice';
 import toast from 'react-hot-toast';
 import { IoAddOutline, IoRemoveOutline, IoTrashOutline } from 'react-icons/io5';
+import { trackReferralEvent, trackVisit } from '@/app/lib/referrals/referralTracker';
 
 
 
@@ -26,6 +27,8 @@ export default function CartPage() {
     if (user?._id) {
       dispatch(fetchCart(user._id));
     }
+       trackReferralEvent({ eventType: "visit" });
+       trackVisit();
   }, [dispatch, user?._id]);
 
   // 3. Local calculation for subtotal

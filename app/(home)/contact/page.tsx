@@ -5,6 +5,7 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import toast from "react-hot-toast";
 import { submitContact } from "@/app/store/slices/contactSlice";
+import { trackReferralEvent, trackVisit } from "@/app/lib/referrals/referralTracker";
 
 export default function ContactPage() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export default function ContactPage() {
   // Trigger entrance animation on mount
   useEffect(() => {
     setIsLoaded(true);
+       trackReferralEvent({ eventType: "visit" });
+       trackVisit();
   }, []);
 
   const handleChange = (

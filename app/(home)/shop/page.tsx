@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from '@/app/store/store';
 import { fetchProducts } from '@/app/store/slices/productSlice';
 import { ProductSkeleton } from '@/app/components/ui/Loading';
 import ProductCard from '@/app/components/ui/ProductCard';
-import { trackReferralEvent } from '@/app/lib/referrals/referralTracker';
+import { trackReferralEvent, trackVisit } from '@/app/lib/referrals/referralTracker';
 
 
 export default function ShopPage() {
@@ -22,8 +22,7 @@ export default function ShopPage() {
 const partnerCode = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get("ref") || localStorage.getItem("visitorId")  : "";
 const visitorId = typeof window !== 'undefined' ? localStorage.getItem("visitorId") || "" : "";
 
-console.log(partnerCode, "CODE")
-console.log(visitorId, "CODE-V")
+
 
   useEffect(() => {
     let visitorId = localStorage.getItem("visitorId");
@@ -32,14 +31,15 @@ console.log(visitorId, "CODE-V")
       visitorId = crypto.randomUUID();
       localStorage.setItem("visitorId", visitorId);
     }
-
+   trackVisit();
     if (!partnerCode) return;
-
     trackReferralEvent({
       partnerCode,
       eventType: "product_view",
     });
   }, []);
+
+
 
 
   useEffect(() => {
