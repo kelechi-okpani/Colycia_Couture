@@ -1,7 +1,8 @@
 "use client";
 
+import { trackReferralEvent, trackVisit } from '@/app/lib/referrals/referralTracker';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   AiOutlineSearch, 
   AiOutlineMail, 
@@ -13,6 +14,13 @@ import {
 } from 'react-icons/ai';
 
 export default function FAQPage() {
+
+     useEffect(() => {
+        trackReferralEvent({ eventType: "visit" });
+          trackVisit();
+      }, []);
+  
+      
   const faqs = [
     {
       icon: <AiOutlineMail />,

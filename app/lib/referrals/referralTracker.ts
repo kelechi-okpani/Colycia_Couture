@@ -84,3 +84,56 @@ export async function trackReferralEvent(data: {
     console.error("Referral tracking failed:", err);
   }
 }
+
+/* -------------------------
+   CONVENIENCE HELPERS
+-------------------------- */
+
+export const trackVisit = () =>
+  trackReferralEvent({
+    eventType: "visit",
+  });
+
+export const trackProductView = (
+  productId: string,
+  product?: any
+) =>
+  trackReferralEvent({
+    eventType: "product_view",
+    metadata: {
+      productId,
+      name: product?.name,
+      price: product?.price,
+    },
+  });
+
+export const trackAddToCart = (
+  productId: string,
+  product?: any
+) =>
+  trackReferralEvent({
+    eventType: "add_to_cart",
+    metadata: {
+      productId,
+      name: product?.name,
+      price: product?.price,
+    },
+  });
+
+export const trackCheckout = (
+  orderId: string
+) =>
+  trackReferralEvent({
+    eventType: "checkout",
+    orderId,
+  });
+
+export const trackPurchase = (
+  orderId: string,
+  revenue: number
+) =>
+  trackReferralEvent({
+    eventType: "purchase",
+    orderId,
+    revenue,
+  });

@@ -1,8 +1,16 @@
 "use client";
+import { trackReferralEvent, trackVisit } from '@/app/lib/referrals/referralTracker';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function AboutPage() {
+  
+    useEffect(() => {
+      trackReferralEvent({ eventType: "visit" });
+        trackVisit();
+    }, []);
+
   return (
   <div className="min-h-screen bg-white text-neutral-900 font-sans relative isolate">
      <div className="about-bg-watermark" aria-hidden="true" />

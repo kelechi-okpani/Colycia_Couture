@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 
 import SizeGuideModal from '@/app/components/ui/SizeGuide';
 import MIght_Like from '@/app/components/ui/Might_Like';
-import { trackReferralEvent } from '@/app/lib/referrals/referralTracker';
+import { trackReferralEvent, trackVisit } from '@/app/lib/referrals/referralTracker';
 
 export default function ProductDetail() {
   const params = useParams();
@@ -41,6 +41,7 @@ export default function ProductDetail() {
     if (params.id) {
       dispatch(fetchProductById(params?.id as string));
     }
+    trackVisit();
     trackReferralEvent({
       eventType: "product_view",
       metadata: { params },
