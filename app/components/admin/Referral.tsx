@@ -22,7 +22,7 @@ export function ReferralDashboardContent() {
   }, [status, dispatch]);
 
 
-    const totalPages = Math.ceil(data.length / limit);
+  const totalPages = Math.ceil(data.length / limit);
   const paginatedOrders = data.slice(
     (page - 1) * limit,
     page * limit
@@ -78,15 +78,19 @@ export function ReferralDashboardContent() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white border rounded-sm overflow-hidden">
+      <div className="bg-white border rounded-lg shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full text-left">
-          <thead className="bg-gray-50">
+          <table className="min-w-full text-left ">
+          <thead className="bg-gray-200 font-bold">
       <tr>
         <th className="px-8 py-4 text-[11px] uppercase text-gray-400">
           Partner
         </th>
 
+        <th className="px-6 py-4 text-right text-[11px] uppercase text-gray-400">
+          commission Rate%
+        </th> 
+        
         <th className="px-6 py-4 text-right text-[11px] uppercase text-gray-400">
           Visits
         </th>
@@ -112,7 +116,7 @@ export function ReferralDashboardContent() {
     </th>
 
    <th className="px-6 py-4 text-right text-[11px] uppercase text-gray-400">
-      C→CO cart To Checkout Rate % 
+     cart To Checkout Rate % 
     </th>
 
   <th className="px-6 py-4 text-right text-[11px] uppercase text-gray-400">
@@ -145,7 +149,7 @@ export function ReferralDashboardContent() {
               ) : (
                 paginatedOrders.map((row:any) => (
                 // data.map((row:any) => (
-                  <tr key={row.partnerCode} className="hover:bg-gray-50">
+                  <tr key={row.partnerCode} className="hover:bg-gray-100 cursor-pointer">
                     {/* Partner */}
                     <td className="px-8 py-5">
                       <div className="text-xs font-semibold uppercase">
@@ -167,6 +171,10 @@ export function ReferralDashboardContent() {
                         </button>
                       </div>
                     </td>
+<td className="px-6 py-5 text-right text-xs">
+  {row.commissionRate}%
+</td>
+
 <td className="px-6 py-5 text-right text-xs">
   {row.visits}
 </td>
